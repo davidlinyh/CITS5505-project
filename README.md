@@ -16,7 +16,7 @@ To install Our Flask App, follow these steps:
 `git clone https://github.com/davidlinyh/CITS5505-project`
 
 ## Navigate to Project Directory
-`cd CITS5505-project`
+`cd CITS5505-project/agileapp`
 
 
 
@@ -42,4 +42,10 @@ pip install -r requirements.txt
 ```
 This command installs all the necessary libraries and tools specified in the requirements.txt file.
 
+# Run the application:
+To run the application, use the command
+```
+flask run
+```
 
+The application will be running on http://localhost:5000/ by default.
