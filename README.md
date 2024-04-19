@@ -13,9 +13,9 @@ Before you begin, ensure you have met the following requirements:
 To install Our Flask App, follow these steps:
 
 # Create and activate a virtual environment:
-
+```
 python3 -m venv myenv
 source myenv/bin/activate
-
+```
 # Install the required packages:
-pip install -r requirements.txt
+`pip install -r requirements.txt`
