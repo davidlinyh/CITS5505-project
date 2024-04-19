@@ -12,10 +12,34 @@ Before you begin, ensure you have met the following requirements:
 ## Installing Our Flask App
 To install Our Flask App, follow these steps:
 
+## Clone the Repository
+`git clone https://github.com/davidlinyh/CITS5505-project`
+
+## Navigate to Project Directory
+`cd CITS5505-project`
+
+
+
 # Create and activate a virtual environment:
+This step is optional but recommended. To create a virtual environment, run the following command:
 ```
-python3 -m venv myenv
-source myenv/bin/activate
+python3 -m venv venv
 ```
-# Install the required packages:
-`pip install -r requirements.txt`
+
+To activate the virtual environment, run one of the following commands depending on your operating system:
+```
+source venv/bin/activate    # Linux or macOS
+venv/Scripts/activate       # Windows
+```
+To deactivate the virtual environment, run the following command:
+```
+deactivate
+```
+Install the required packages:
+If you're using a virtual environment, make sure to activate it first. Then, run the following command:
+```
+pip install -r requirements.txt
+```
+This command installs all the necessary libraries and tools specified in the requirements.txt file.
+
+
