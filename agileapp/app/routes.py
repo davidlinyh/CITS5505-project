@@ -35,3 +35,23 @@ def manage_account():
         # Process changes here
         return redirect(url_for('account'))
     return render_template('manage-account.html')
+
+@app.route('/item')
+def item():
+    return render_template('item.html')
+
+@app.route('/admin/index')
+@app.route('/admin')
+def admin_index():
+    return render_template('admin/index.html')
+
+@app.route('/admin/manage-items', methods=['GET']) 
+def admin_manage_items(): 
+    return render_template('admin/manage-items.html')
+
+@app.route('/admin/new-item', methods=['GET', 'POST'])
+def new_item():
+    if request.method == 'POST':
+        # Process new item form here
+        return redirect(url_for('admin_manage_item'))
+    return render_template('admin/new-item.html')
