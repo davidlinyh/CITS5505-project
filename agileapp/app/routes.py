@@ -20,4 +20,18 @@ def register():
         # Validate form data, create user, etc.
         return redirect(url_for('login'))  # Redirect to login after registration
     return render_template('register.html')
-                           
+
+@app.route('/gallery')
+def gallery():
+    return render_template('gallery.html')
+
+@app.route('/account')
+def account():
+    return render_template('account.html')
+
+@app.route('/manage-account', methods=['GET', 'POST'])
+def manage_account():
+    if request.method == 'POST':
+        # Process changes here
+        return redirect(url_for('account'))
+    return render_template('manage-account.html')
