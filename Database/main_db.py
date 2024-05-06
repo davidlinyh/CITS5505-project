@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey
-from sqlalchemy.orm import relationship,declarative_base
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey, Enum
+from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
 
 Base = declarative_base()
@@ -8,12 +8,12 @@ class Users(Base):
     __tablename__ = 'Users'
     user_id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False, unique=True)
+    user_type = Column(Enum('admin','user'), nullable=False)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
     password_hash = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     photo_path = Column(String)
-    address = Column(String)
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now)
 
 class LostItems(Base):
     __tablename__ = 'LostItems'
