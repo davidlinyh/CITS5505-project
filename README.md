@@ -31,6 +31,10 @@ To activate the virtual environment, run one of the following commands depending
 source venv/bin/activate    # Linux or macOS
 venv/Scripts/activate       # Windows
 ```
+If you are on Windows and unable to activate virtual environment, according to Microsoft Tech Support, it is related to setting Execution Policy. Try the following:
+```
+Set-ExecutionPolicy Unrestricted -Force
+```
 To deactivate the virtual environment, run the following command:
 ```
 deactivate
