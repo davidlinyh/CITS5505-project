@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Items</title>
+</head>
+<body>
+    <header>
+        <h1>Manage Items</h1>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Date Found</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example row (should pull data from db) -->
+                <tr>
+                    <td>Sample Item</td>
+                    <td>Black umbrella, found near the entrance</td>
+                    <td>Reid Library</td>
+                    <td>2024-05-01</td>
+                    <td>
+                        <button onclick="window.location.href='/admin/edit-item';">Edit</button>
+                        <button onclick="window.location.href='/admin/archive-item';">Archive</button>
+                    </td>
+                </tr>
+                <!-- Repeat rows for each item -->
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
