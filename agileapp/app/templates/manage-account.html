@@ -3,29 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Account</title>
+    <title>Manage Account Details</title>
 </head>
 <body>
     <header>
-        <h1>Manage Your Account</h1>
+        <!-- navbar-->
+        <nav class="navbar">
+            <div class="nav-menu">
+                <ul>
+                    <li class="nav-menu-title">UWA Lost and Found</li> 
+                    <li><a href="/gallery">Gallery</a></li>
+                    <li><a href="#">History</a></li>
+                    <li>
+                        <div class="dropdown">
+                            <button class="dropbtn"><img src="" alt="Account Image"></button>
+                            <div class="dropdown-content">
+                              <a href="/account">View Profile</a>
+                              <a href="/manage-account">Manage Account</a>
+                              <a href="#">Sign Out</a>
+                            </div>
+                          </div> 
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </header>
-    <main>
-        <form action="{{ url_for('manage_account') }}" method="post" enctype="multipart/form-data">
-            <label for="first_name">First Name:</label><br>
-            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required><br>
+    <!--Manage password, photo, address, about me -->
+    <h2>Manage Account Details</h2>
+    <form action="/manage-account", method="post" enctype="multipart/form-data">
+        <h3>Upload Photo</h3>
+        <div>
+            <label for="current_photo">Current Photo:</label>
+            <br>
+            <!--NOTE change when image data source path is known-->
+            <img src="not_found.png" alt="" class="">
+        </div>
+        <div>
+            <label for="new_photo">Choose a photo to upload:</label>
+            <br>
+            <input type="file" id="new_photo" name="new_photo" accept="image/*" onchange="">
+            <br>
+            <img src="" alt="" id="imagePreview"  style="max-width: 200px; height: auto;">
+        </div>
+        <div>
+            <hr>
+        </div>  
+        <h3>Change About Me</h3>
+        <div>
+            <label for="current_aboutme">Current About Me:</label>
+            <div>
+                <p></p>
+            </div>
+        </div>
+        <div>
+            <label for="new_aboutme">Change About Me:</label>
+            <div>
+                <input type="text" id = "aboutme" name = "aboutme" placeholder="Enter description">
+            </div>
 
-            <label for="last_name">Last Name:</label><br>
-            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required><br>
+        </div>
+        <div>
+            <hr>
+        </div>
+        <h3>Change Password</h3>
+        <div>
+            <label for="password_old">Current Password:</label>
+            <input type="password" id="password_old" name="password_old" placeholder="Enter current password">
+        </div>
+        <div>
+            <label for="password_new">New Password:</label>
+            <input type="password" id="password_new" name="password_new" placeholder="Create new password">
+        </div>
+        <div>
+            <hr>
+        </div>
+        <h3>Location</h3>
+        <div>
+            <label for="city">Current City:</label>
+            <p></p>
+        </div>
+        <div>
+            <label for="city">Change City:</label>
+            <input type="text" id="city_new" name="city_new" placeholder="Enter your city">
+        </div>
+        <div>
+            <button type="submit">Save Changes</button>
+        </div>
+    </form>
 
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" value="{{ user.email }}" required><br>
-
-            <!-- Optional: Update profile picture -->
-            <label for="photo">Profile Picture:</label><br>
-            <input type="file" id="photo" name="photo" accept="image/*"><br><br>
-
-            <input type="submit" value="Update Account">
-        </form>
-    </main>
 </body>
 </html>
