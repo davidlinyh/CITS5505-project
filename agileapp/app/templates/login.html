@@ -13,6 +13,25 @@
             <div class="container-header">
                 <img class="logo" src="{{url_for('static', filename='css/SGlogo.PNG')}}" alt="UWA Logo">
                 <h2 class="form-heading">Lost and Found Portal</h2>
+    <header>
+        <h1>UWA Lost and Found</h1>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h2 class="form-heading">Login</h2>
+        <!-- <form action="/login" method="post" class="login-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required autofocus placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
             </div>
             <div class="container-text">
                 <h3>Login</h3>
@@ -41,7 +60,41 @@
                 </div>
             </div>
         </div>
-
+            <p class="switch-to-register">
+                Don't have an account? <a href="/register">Register here</a>
+            </p>
+        </form> -->
+        <p>
+        <!-- flash message if email not found or wrong password. "message|safe" is to mark it as safe to be able to mark it as clickable link not a raw html markup. -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message|safe }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        </p>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.email.label }}<br>
+                {{ form.email(size=32) }}<br>
+                {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}<br>
+                {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
     </div>
 </body>
 </html>
