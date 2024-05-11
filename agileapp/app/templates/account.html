@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Account Details</title>
 </head>
 <body>
     <header>
-        <!-- navbar -->
+        <!-- navbar-->
         <nav class="navbar">
             <div class="nav-menu">
                 <ul>
-                    <li class="nav-menu-title">UWA Lost and Found</li>
+                    <li class="nav-menu-title">UWA Lost and Found</li> 
                     <li><a href="/gallery">Gallery</a></li>
                     <li><a href="#">History</a></li>
                     <li>
                         <div class="dropdown">
-                            <button class="dropbtn"><img src="{{ url_for('static', filename=user.photo_path) }}" alt="Account Image" style="height:50px;"></button>
+                            <button class="dropbtn"><img src="" alt="Account Image"></button>
                             <div class="dropdown-content">
                               <a href="/account">View Profile</a>
                               <a href="/manage-account">Manage Account</a>
-                              <a href="/logout">Sign Out</a>
+                              <a href="#">Sign Out</a>
                             </div>
-                        </div>
+                          </div> 
                     </li>
                 </ul>
             </div>
@@ -31,22 +30,16 @@
     </header>
     
     <div>
-        <img src="{{ url_for('static', filename=user.photo_path) }}" alt="Profile Image" style="width:150px; height:150px;">
+        <!--NOTE change when image data source path is known-->
+        <img src="not_found.png" alt="" class="">
     </div>
     <div>
         <h3>About Me</h3>
         <div>
-            <label for="name">Full Name:</label>
-            <p>{{ user.first_name }} {{ user.last_name }}</p>
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <p>{{ user.email }}</p>
-        </div>
-        <div>
             <label for="city">Current City:</label>
-            <p>{{ user.city }}</p> <!-- Assuming 'city' is a field in the User model -->
+            <p></p>
         </div>
+        <p></p>
     </div>
 </body>
 </html>

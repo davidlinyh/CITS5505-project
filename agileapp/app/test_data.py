@@ -1,11 +1,11 @@
 from app import db
 from app.models import *
-
+from werkzeug.security import generate_password_hash
 
 #create user data
 admin1 = User(
     email = "admin1@gmail.com",
-    password_hash = "hashhh",
+    password_hash = generate_password_hash('123'),
     previlage = "admin",
     first_name = "admin",
     last_name = "one",
@@ -16,7 +16,7 @@ admin1 = User(
 
 admin2 = User(
     email = "admin2@gmail.com",
-    password_hash = "hashhh",
+    password_hash = generate_password_hash('123'),
     previlage = "admin",
     first_name = "admin",
     last_name = "two",
@@ -27,7 +27,7 @@ admin2 = User(
 
 claimer1 = User(
     email = "user1@gmail.com",
-    password_hash = "hashhh",
+    password_hash = generate_password_hash('123'),
     previlage = "claimer",
     first_name = "claimer",
     last_name = "one",
@@ -37,7 +37,7 @@ claimer1 = User(
 )
 claimer2 = User(
     email = "user2@gmail.com",
-    password_hash = "hashhh",
+    password_hash = generate_password_hash('123'),
     previlage = "claimer",
     first_name = "claimer",
     last_name = "two",
