@@ -40,11 +40,21 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        # Process registration form here
-        # Validate form data, create user, etc.
-        return redirect(url_for('login'))  # Redirect to login after registration
-    return render_template('register.html')
+    print('enter register')
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        print("enter validation")
+        user = User(first_name=form.firstname.data, last_name=form.lastname.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Registration Success! Please Log in to continue.')
+        return redirect(url_for('login'))
+    print(form.data)
+    print(form.errors)
+    return render_template('register.html', title='Register', form=form)
 
 @app.route('/gallery')
 @login_required
