@@ -97,6 +97,9 @@ def admin_manage_items():
 @app.route('/admin/new-item', methods=['GET', 'POST'])
 @login_required
 def new_item():
+    if not current_user.previlage == 'admin':
+        return redirect(url_for('index'))
+    
     form = AddItemForm()
     if form.validate_on_submit():
         print("enter validation")
