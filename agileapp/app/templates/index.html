@@ -18,15 +18,7 @@
     <main>
         <h2>Welcome to the UWA Lost and Found</h2>
         <p>This application helps the UWA community find lost items. Browse the gallery or log in to make a claim.</p>
-        {% if current_user.is_anonymous %}
-        <a href="/register">Register</a>
-        {% endif %}
-
-        {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login') }}">Login</a>
-        {% else %}
-        <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
+        <a href="/login">Login</a> | <a href="/register">Register</a>
     </main>
     <footer>
         © 2024 University of Western Australia. All rights reserved.
