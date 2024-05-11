@@ -4,8 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <div class="container-wrap">
+        <div class="container">
+            <div class="container-header">
+                <img class="logo" src="{{url_for('static', filename='css/SGlogo.PNG')}}" alt="Student Guild Logo">
+                <h2 class="form-heading">Lost and Found Portal</h2>
+            </div>
+            <div class="container-text">
+                <h3>Register</h3>
+                <form action="/register" method="post">
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required autofocus placeholder="Enter email">
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required placeholder="Create password">
+                    </div>
+                    <div>
+                        <label for="confirm_password">Confirm Password:</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm password">
+                    </div>
+                    <div>
+                        <button type="submit">Register</button>
+                    </div>
+                </form>
+                <p class="switch-login-register">
+                    Already have an account? <a href="/login">Login here</a>
+                </p>
+                <div class="additional-text">
+                    <p>If you have found an item, please return it to the Guild Office located at:</p>
+                    <address>
+                        UWA Student Guild Office, 1 Hackett Drive, Crawley WA 6009
+                    </address>
+                    <p>For any enquiries, please <a href="https://www.uwastudentguild.com/contact" target="blank">contact us</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <h2>Register</h2>
     <!-- <form action="/register" method="post">
         <div>
