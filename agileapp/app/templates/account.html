@@ -4,42 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
         <!-- navbar-->
         <nav class="navbar">
+            <img class="logo-navbar" src="{{ url_for('static', filename='css/SGlogo.PNG') }}" alt="Student Guild Logo">
             <div class="nav-menu">
+                <div class="nav-menu-title">Lost and Found</div>
                 <ul>
-                    <li class="nav-menu-title">UWA Lost and Found</li> 
-                    <li><a href="/gallery">Gallery</a></li>
+                    <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
                     <li><a href="#">History</a></li>
                     <li>
                         <div class="dropdown">
                             <button class="dropbtn"><img src="" alt="Account Image"></button>
                             <div class="dropdown-content">
-                              <a href="/account">View Profile</a>
-                              <a href="/manage-account">Manage Account</a>
-                              <a href="#">Sign Out</a>
+                                <a href="{{ url_for('account') }}">View Profile</a>
+                                <a href="{{ url_for('manage_account') }}">Manage Account</a>
+                                <a href="{{ url_for('logout') }}">Log Out</a>
                             </div>
-                          </div> 
+                        </div> 
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
-    
-    <div>
-        <!--NOTE change when image data source path is known-->
-        <img src="not_found.png" alt="" class="">
+
+    <div class="page-header">
+        <h2>Account</h2>
     </div>
-    <div>
-        <h3>About Me</h3>
+    <div class="content-container">
+        <img src="{{ url_for('static', filename=user.photo_path) }}" alt="Profile Image" class="profile-img">
         <div>
-            <label for="city">Current City:</label>
-            <p></p>
+            <h3>About Me</h3>
+            <div>
+                <label for="name">Name:</label>
+                <p>{{ user.first_name }} {{ user.last_name }}</p>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <p>{{ user.email }}</p>
+            </div>
+            <div>
+                <label for="city">Current City:</label>
+                <p>{{ user.city }}</p> <!-- Assuming you have a 'city' field -->
+            </div>
         </div>
-        <p></p>
     </div>
 </body>
 </html>

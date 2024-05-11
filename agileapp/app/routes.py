@@ -13,25 +13,24 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print('login')
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('gallery'))  # Redirect to a useful page post-login
+
     form = LoginForm()
     if form.validate_on_submit():
-        # print('enter validate')
         user = db.session.scalar(sa.select(User).where(User.email == form.email.data))
         if user is None:
-            register_link = '<a href="{}">register</a>'.format(url_for('register'))
-            flash('User not found. Please {} first.'.format(register_link), 'info')
+            flash('User not found. Please register first.', 'info')
             return redirect(url_for('login'))
-        elif not user.check_password(form.password.data):
-            flash('Invalid password')
+        if not user.check_password(form.password.data):
+            flash('Invalid password', 'error')
             return redirect(url_for('login'))
 
-        login_user(user)
+        login_user(user, remember=form.remember_me.data if 'remember_me' in form else False)
+        next_page = request.args.get('next')
+        return redirect(next_page or url_for('gallery'))  # Redirect to `next` page or `gallery`
 
-        return redirect(url_for('gallery'))
-    return render_template('login.html', title="Log In", form=form)
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():
@@ -64,7 +63,7 @@ def gallery():
 @app.route('/account')
 @login_required
 def account():
-    return render_template('account.html')
+    return render_template('account.html', user=current_user)
 
 @app.route('/manage-account', methods=['GET', 'POST'])
 @login_required
@@ -72,12 +71,13 @@ def manage_account():
     if request.method == 'POST':
         # Process changes here
         return redirect(url_for('account'))
-    return render_template('manage-account.html')
+    return render_template('manage-account.html', user=current_user)
 
-@app.route('/item')
+@app.route('/item/<int:item_id>')
 @login_required
-def item():
-    return render_template('item.html')
+def item(item_id):
+    item = LostItem.query.get_or_404(item_id)  # Fetch the item or return 404 if not found
+    return render_template('item.html', item=item)
 
 @app.route('/admin/index')
 @app.route('/admin')
