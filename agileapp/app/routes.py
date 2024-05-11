@@ -13,25 +13,24 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print('login')
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('gallery'))  # Redirect to a useful page post-login
+
     form = LoginForm()
     if form.validate_on_submit():
-        # print('enter validate')
         user = db.session.scalar(sa.select(User).where(User.email == form.email.data))
         if user is None:
-            register_link = '<a href="{}">register</a>'.format(url_for('register'))
-            flash('User not found. Please {} first.'.format(register_link), 'info')
+            flash('User not found. Please register first.', 'info')
             return redirect(url_for('login'))
-        elif not user.check_password(form.password.data):
-            flash('Invalid password')
+        if not user.check_password(form.password.data):
+            flash('Invalid password', 'error')
             return redirect(url_for('login'))
 
-        login_user(user)
+        login_user(user, remember=form.remember_me.data if 'remember_me' in form else False)
+        next_page = request.args.get('next')
+        return redirect(next_page or url_for('gallery'))  # Redirect to `next` page or `gallery`
 
-        return redirect(url_for('gallery'))
-    return render_template('login.html', title="Log In", form=form)
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():

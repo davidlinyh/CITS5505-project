@@ -4,73 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>UWA Lost and Found</h1>
         <nav class="navbar">
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/gallery">Gallery</a></li>
+                <li><img class="logo" src="{{ url_for('static', filename='css/SGlogo.PNG') }}" alt="UWA Logo"></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
             </ul>
         </nav>
+        <h1>UWA Lost and Found</h1>
     </header>
-    <div class="container">
-        <h2 class="form-heading">Login</h2>
-        <!-- <form action="/login" method="post" class="login-form">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required autofocus placeholder="Enter your email">
+    <div class="container-wrap">
+        <div class="container">
+            <div class="container-header">
+                <h2 class="form-heading">Login to Lost and Found Portal</h2>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
-            </div>
-            <div class="form-group">
-                <button type="submit">Login</button>
-            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <form action="{{ url_for('login') }}" method="post" class="login-form">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(size=32, class_='form-control') }}
+                    {% for error in form.email.errors %}
+                    <span class="error" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(size=32, class_='form-control') }}
+                    {% for error in form.password.errors %}
+                    <span class="error" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class_='btn') }}
+                </div>
+            </form>
             <p class="switch-to-register">
-                Don't have an account? <a href="/register">Register here</a>
+                Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
             </p>
-        </form> -->
-        <p>
-        <!-- flash message if email not found or wrong password. "message|safe" is to mark it as safe to be able to mark it as clickable link not a raw html markup. -->
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message|safe }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        </p>
-        <form action="" method="post" novalidate>
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.email.label }}<br>
-                {{ form.email(size=32) }}<br>
-                {% for error in form.email.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-            <p>
-                {{ form.password.label }}<br>
-                {{ form.password(size=32) }}<br>
-                {% for error in form.password.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-            <p>{{ form.submit() }}</p>
-        </form>
-    </div>
-
-    <div class="lost-found-notice">
-        <p>If you have found an item, please return it to the Guild Office located at:</p>
-        <address>
-            1 Hackett Drive, Crawley WA 6009
-        </address>
-        <p>For any enquiries, please <a href="https://www.uwastudentguild.com/contact" target="blank">contact us</a>.</p>
+        </div>
     </div>
 </body>
 </html>
