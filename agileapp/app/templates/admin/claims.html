@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claims Administration</title>
+</head>
+<body>
+    <header>
+        <h1>Manage Claims</h1>
+        <nav>
+            <a href="{{ url_for('admin_index') }}">Back to Dashboard</a>
+        </nav>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Claim ID</th>
+                    <th>Item Name</th>
+                    <th>Claimer</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for claim in claims %}
+                <tr>
+                    <td>{{ claim.id }}</td>
+                    <td>{{ claim.item_id }}</td> <!-- You might want to fetch item details here -->
+                    <td>{{ claim.claimer_id }}</td> <!-- Consider displaying the claimer's name or username -->
+                    <td>{{ claim.status }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_claim', claim_id=claim.id) }}">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
