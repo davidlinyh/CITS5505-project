@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Edit Claim</title>
+</head>
+<body>
+    <header>
+        <h1>Edit Claim</h1>
+        <nav>
+            <a href="{{ url_for('admin_claims') }}">Back to Claims List</a>
+        </nav>
+    </header>
+    <main>
+        <form action="{{ url_for('edit_claim', claim_id=claim.id) }}" method="post">
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="Pending" {% if claim.status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Approved" {% if claim.status == 'Approved' %}selected{% endif %}>Approved</option>
+                <option value="Denied" {% if claim.status == 'Denied' %}selected{% endif %}>Denied</option>
+            </select>
+            <br>
+            <input type="submit" value="Update Claim">
+        </form>
+    </main>
+</body>
+</html>
