@@ -25,6 +25,8 @@
             <input type="file" id="image" name="image" accept="image/*"><br><br>
             <input type="submit" value="Submit">
         </form> -->
+
+        <h2>Post Lost Item</h2>
         <form method="POST" action="{{ url_for('new_item') }}" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div>
@@ -42,16 +44,20 @@
                 {% endfor %}
             </div>
             <div>
-                {{ form.photos.label }}<br>
-                {{ form.photos(multiple="multiple") }}<br>
-                {% for error in form.photos.errors %}
-                    <span style="color: red;">{{ error }}</span><br>
+                {{ form.tags.label }}<br>
+                {{ form.tags(size=32) }}<br>
+                {% for error in form.tags.errors %}
+                <span style="color: red;">{{ error }}</span>
                 {% endfor %}
             </div>
-
             <div>
-                {{ form.submit(class_='button') }}
+                {{ form.photo_paths.label }}<br>
+                {{ form.photo_paths(multiple="multiple") }}<br>
+                {% for error in form.photo_paths.errors %}
+                <span style="color: red;">{{ error }}</span>
+                {% endfor %}
             </div>
+            <button type="submit">Submit</button>
         </form>
     </main>
 </body>

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 import sqlalchemy as sa
 from app import db
@@ -7,10 +8,8 @@ from app.models import User
 
 
 class LoginForm(FlaskForm):
-    # username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    # remember_me = BooleanField('Remember Me')
     submit = SubmitField('Log In')
 
 
@@ -27,3 +26,10 @@ class RegistrationForm(FlaskForm):
             User.email == email.data))
         if user is not None:
             raise ValidationError('Email already registered. Please use a different email address.')
+
+class AddItemForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    photos = FileField('Photos', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
+    # tags = StringField('Tags', validators=[DataRequired()])
+    submit = SubmitField('Publish')
