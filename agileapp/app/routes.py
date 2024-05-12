@@ -8,6 +8,10 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddItemForm
 from app.models import User, LostItem
 import os
+import json
+
+def array_to_string(arr): return json.dumps(arr)
+def string_to_array(s): return json.loads(s)
 
 @app.route('/')
 @app.route('/index')
@@ -109,15 +113,16 @@ def new_item():
                         photo_paths="", 
                         admin_id=current_user.id)
         files = request.files.getlist('photos')
+        photo_paths_array = []
         if files:
             for index, file in enumerate(files):
-                if index > 0:
-                    item.photo_paths = item.photo_paths + ','
+                _, file_extension = os.path.splitext(file.filename)
                 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-                filename = secure_filename(timestamp+'_'+str(index))
+                filename = secure_filename(timestamp+'_'+str(index)+file_extension)
                 file_path = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
                 file.save(file_path)
-                item.photo_paths = item.photo_paths + file_path
+                photo_paths_array.append(file_path)
+            item.photo_paths = array_to_string(photo_paths_array)
 
         db.session.add(item)
         db.session.commit()
