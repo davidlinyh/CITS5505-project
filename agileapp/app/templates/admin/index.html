@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Admin Dashboard</title>
 </head>
 <body>
     <header>
         <h1>Admin Dashboard</h1>
         <nav>
-            <a href="/admin/new-item">Add New Item</a>
-            <a href="/admin/manage-items">Manage Items</a>
-            <a href="/admin/claims">View Claims</a>
+            <a href="{{ url_for('new_item') }}">Add New Item</a>
+            <a href="{{ url_for('admin_manage_items') }}">Manage Items</a>
+            <a href="{{ url_for('admin_claims') }}">View Claims</a>
         </nav>
     </header>
     <main>
         <section id="recent-items">
             <h2>Recent Items</h2>
-            <!-- Dynamic list of recent items -->
+            {% if recent_items %}
+            <ul>
+                {% for item in recent_items %}
+                <li><strong>{{ item.name }}</strong> - Updated on {{ item.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No recent items to display.</p>
+            {% endif %}
         </section>
         <section id="claims-overview">
             <h2>Recent Claims</h2>
-            <!-- Dynamic list of recent claims -->
+            {% if recent_claims %}
+            <ul>
+                {% for claim in recent_claims %}
+                <li><strong>Claim by User ID {{ claim.claimer_id }}</strong> - Status: {{ claim.status }} on {{ claim.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No recent claims to display.</p>
+            {% endif %}
         </section>
     </main>
 </body>
