@@ -3,36 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Items</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Manage Lost Items</title>
 </head>
 <body>
     <header>
-        <h1>Manage Items</h1>
+        <h1>Manage Lost Items</h1>
     </header>
     <main>
         <table>
             <thead>
                 <tr>
-                    <th>Item Name</th>
+                    <th>Name</th>
                     <th>Description</th>
-                    <th>Location</th>
-                    <th>Date Found</th>
+                    <th>Tags</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Example row (should pull data from db) -->
+                {% for item in items %}
                 <tr>
-                    <td>Sample Item</td>
-                    <td>Black umbrella, found near the entrance</td>
-                    <td>Reid Library</td>
-                    <td>2024-05-01</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.tags }}</td>
+                    <td>{{ item.status }}</td>
                     <td>
-                        <button onclick="window.location.href='/admin/edit-item';">Edit</button>
-                        <button onclick="window.location.href='/admin/archive-item';">Archive</button>
+                        <a href="/admin/edit-item/{{ item.id }}">Edit</a>
+                        <!-- Additional actions like Archive could be added here -->
                     </td>
                 </tr>
-                <!-- Repeat rows for each item -->
+                {% endfor %}
             </tbody>
         </table>
     </main>
