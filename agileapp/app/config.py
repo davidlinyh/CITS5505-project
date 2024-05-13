@@ -2,7 +2,7 @@ import os
 import secrets
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-def generate_secureKey(length=50):
+def generate_secureKey(length=25):
     return secrets.token_hex(length)
 
 class Config:
