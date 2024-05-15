@@ -56,3 +56,12 @@ class Claim(db.Model):
     def __repr__(self):
         return '<Claim {}>'.format(self.item_id)
     
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(128))
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    unread = db.Column(db.Boolean, default=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    def __repr__(self):
+        return '<Notification {}>'.format(self.message)
