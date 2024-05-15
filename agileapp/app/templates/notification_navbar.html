@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .unread-notification {
+            font-weight: bold;
+            color: rgb(89, 115, 165);
+        }
+    </style>
+    <title>Admin Dashboard</title>
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Notifications <span id="notificationCount" class="badge badge-pill badge-primary">{% if unread_notifications_count > 0 %} {{unread_notifications_count }} {% endif %}</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="notificationDropdown">
+                            <div id="allNotifications">
+                                {% for notification in all_notifications %}
+                                {% if notification.unread == True %}<a class="dropdown-item unread-notification" href="#">{{notification.message}}</a> 
+                                {% else %}
+                                <a class="dropdown-item" href="#">{{ notification.message }}</a>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!-- <div class="dropdown-divider"></div> -->
+                            <!-- See All Notifications -->
+                            <!-- <a class="dropdown-item" href="#">See All Notifications</a> -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+        <div id="notifications"></div>
+
+    </header>
+    <main>
+
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('navbarDropdown').addEventListener('click', function () {
+                // Set notification as read 2 seconds after clicking notification navbar
+                setTimeout(() => {
+                    fetch('/notification_clicked', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({}),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data.message);  // Log the response from the server
+                            // Refresh notification list and count
+                            refreshNotifications(data);
+                        })
+                        .catch(error => {
+                            console.error('Error handling notification click:', error);
+                        });
+                }, 2000); // 2000 milliseconds = 2 seconds
+            });
+        });
+
+
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function () {
+            socket.emit('join', { room: '{{ current_user.id }}' }); // Join user's room on connect
+        });
+
+        socket.on('new_notification', function (data) {
+            refreshNotifications(data);
+        });
+
+        function refreshNotifications(data){
+            var allNotificationsContainer = document.getElementById('allNotifications');
+            allNotificationsContainer.innerHTML = '';
+
+            var all_notifications = data.all_notifications
+            all_notifications.forEach(notification => {
+                var notificationElement = document.createElement('div');
+                notificationElement.classList.add('dropdown-item');
+                if(notification.unread) notificationElement.classList.add('unread-notification');
+                notificationElement.textContent = notification.message;
+                allNotificationsContainer.appendChild(notificationElement);
+            });
+
+            // Function to update notification count
+            if(data.unread_notification_count > 0) {
+                document.getElementById("notificationCount").innerText = data.unread_notification_count;
+            } else document.getElementById("notificationCount").innerText = '';
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

@@ -11,8 +11,8 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(128))
     last_name = db.Column(db.String(128))
     photo_path = db.Column(db.String(128))
-    created_at = db.Column(db.DateTime, default=datetime.now())
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -34,8 +34,8 @@ class LostItem(db.Model):
     tags = db.Column(db.String(128))
     photo_paths = db.Column(db.String(128))
     status = db.Column(db.String(128), default="unclaimed")
-    created_at = db.Column(db.DateTime, default=datetime.now())
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    
     def __repr__(self):
@@ -47,8 +47,8 @@ class Claim(db.Model):
     evidence_photo_paths = db.Column(db.String(512))
     admin_response = db.Column(db.String(512))
     status = db.Column(db.String(128), default="waiting_approval")
-    created_at = db.Column(db.DateTime, default=datetime.now())
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)
     item_id = db.Column(db.Integer, db.ForeignKey('lost_item.id'))
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     claimer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -59,7 +59,7 @@ class Claim(db.Model):
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(128))
-    created_at = db.Column(db.DateTime, default=datetime.now())
+    created_at = db.Column(db.DateTime, default=datetime.now)
     unread = db.Column(db.Boolean, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
