@@ -35,7 +35,7 @@
             </div>
             <div>
                 {{ form.photos.label }}<br>
-                {{ form.photos() }}<br>
+                {{ form.photos(multiple="multiple") }}<br>
                 {% for error in form.photos.errors %}
                     <span style="color: red;">{{ error }}</span><br>
                 {% endfor %}
