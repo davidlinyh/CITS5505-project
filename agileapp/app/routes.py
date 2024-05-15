@@ -92,22 +92,32 @@ def manage_account():
 
 @app.route('/item/<int:item_id>')
 @login_required
-@login_required
 def item(item_id):
-    item = LostItem.query.get_or_404(item_id)  # Fetch the item or return 404 if not found
-    return render_template('item.html', item=item)
+    item = LostItem.query.get_or_404(item_id) # Fetch the item or return 404 if not found
+    return render_template('item.html', item_id=item_id, item=item)
+
 
 @app.route('/admin/index')
 @app.route('/admin')
 @login_required
 def admin_index():
-    recent_items = LostItem.query.order_by(LostItem.updated_at.desc()).limit(5).all()
-    recent_claims = Claim.query.order_by(Claim.updated_at.desc()).limit(5).all()
+    if current_user.previlage != 'admin':
+        return redirect(url_for('index'))
+    
+    recent_items = LostItem.query.order_by(LostItem.created_at.desc()).limit(5).all()
+    recent_claims = db.session.query(Claim, User, LostItem)\
+                              .join(User, User.id == Claim.claimer_id)\
+                              .join(LostItem, LostItem.id == Claim.item_id)\
+                              .order_by(Claim.created_at.desc())\
+                              .limit(5)\
+                              .all()
     return render_template('admin/index.html', recent_items=recent_items, recent_claims=recent_claims)
 
 @app.route('/admin/manage-items', methods=['GET']) 
 @login_required
 def admin_manage_items(): 
+    if not current_user.previlage == 'admin':
+        return redirect(url_for('index'))
     items = LostItem.query.all() # Fetch all lost items from the database
     return render_template('admin/manage-items.html', items=items)
 
@@ -142,11 +152,14 @@ def new_item():
 
         return redirect(url_for('admin_manage_items'))
 
-    return render_template('admin/new-item.html', form=form)
+    return render_template('/admin/new-item.html', form=form)
 
 @app.route('/admin/edit-item/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def admin_edit_item(item_id):
+    if not current_user.previlage == 'admin':
+        return redirect(url_for('index'))
+    
     item = db.session.query(LostItem).filter_by(id=item_id).first()
     if request.method == 'POST':
         if item:
@@ -170,17 +183,74 @@ def admin_edit_item(item_id):
 @app.route('/admin/claims')
 @login_required
 def admin_claims():
-    claims = Claim.query.all()  # Adjust the query as needed for your use case
+    if not current_user.previlage == 'admin':
+        return redirect(url_for('index'))
+    
+    claims = db.session.query(Claim, User, LostItem).join(User, User.id == Claim.claimer_id).join(LostItem, LostItem.id == Claim.item_id).all()
     return render_template('admin/claims.html', claims=claims)
 
 @app.route('/admin/edit-claim/<int:claim_id>', methods=['GET', 'POST'])
 @login_required
 def edit_claim(claim_id):
-    claim = Claim.query.get_or_404(claim_id)  # Fetch the claim or show 404 if not found
+    if not current_user.previlage == 'admin':
+        return redirect(url_for('index'))
+    
+    claim = Claim.query.get_or_404(claim_id)
     if request.method == 'POST':
-        # Update the claim's status from the form data
-        claim.status = request.form['status']
+        new_status = request.form.get('status')
+        claim.status = new_status
+        if new_status == 'Approved':
+            update_item_status(claim.item_id)
         db.session.commit()
-        flash('Claim updated successfully!', 'success')
-        return redirect(url_for('admin_claims'))  # Redirect back to the claims list
-    return render_template('admin/edit-claim.html', claim=claim)  # Render a form to edit the claim
+        flash('Claim status updated successfully.', 'success')
+        return redirect(url_for('admin_claims'))
+
+    return render_template('/admin/edit-claim.html', claim=claim)
+
+def update_item_status(item_id):
+    item = LostItem.query.get(item_id)
+    if item:
+        item.status = 'claimed'
+        db.session.commit()
+
+@app.route('/submit-claim', methods=['POST'])
+def submit_claim():
+    if not current_user.is_authenticated:
+        flash('You need to log in to submit a claim.', 'info')
+        return redirect(url_for('login'))
+
+    item_id = request.form['item_id']
+    description = request.form['claimer_description']
+    evidence_photo_path = request.files['evidence_photo_paths']
+
+    # Process and save the evidence photo
+    if evidence_photo_path:
+        filename = secure_filename(evidence_photo_path.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        evidence_photo_path.save(filepath)
+
+    # Create and save the claim
+    claim = Claim(
+        item_id=item_id,
+        claimer_id=current_user.id,
+        claimer_description=description,
+        evidence_photo_paths=filename if evidence_photo_path else None,
+        status='waiting_approval'
+    )
+    db.session.add(claim)
+    db.session.commit()
+
+    flash('Your claim has been submitted successfully.', 'success')
+    return redirect(url_for('item', item_id=item_id))  # Redirect back to the item page
+
+@app.route('/admin/delete-item/<int:item_id>', methods=['POST'])
+@login_required
+def admin_delete_item(item_id):
+    if not current_user.previlage == 'admin':
+        return redirect(url_for('index'))
+
+    item = LostItem.query.get_or_404(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    flash('Item deleted successfully.', 'success')
+    return redirect(url_for('admin_manage_items'))

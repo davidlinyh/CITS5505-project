@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Admin Dashboard</title>
 </head>
 <body>
@@ -18,27 +17,27 @@
     <main>
         <section id="recent-items">
             <h2>Recent Items</h2>
-            {% if recent_items %}
             <ul>
                 {% for item in recent_items %}
-                <li><strong>{{ item.name }}</strong> - Updated on {{ item.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+                    <li>
+                        <strong>{{ item.name }}</strong> - <em>{{ item.description }}</em>
+                        <br>
+                        <img src="{{ url_for('static', filename=item.photo_paths) if item.photo_paths else 'path/to/default/image.jpg' }}" alt="{{ item.name }}" style="width:100px; height:auto;">
+                    </li>
                 {% endfor %}
             </ul>
-            {% else %}
-            <p>No recent items to display.</p>
-            {% endif %}
         </section>
-        <section id="claims-overview">
+        <section id="recent-claims">
             <h2>Recent Claims</h2>
-            {% if recent_claims %}
             <ul>
-                {% for claim in recent_claims %}
-                <li><strong>Claim by User ID {{ claim.claimer_id }}</strong> - Status: {{ claim.status }} on {{ claim.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+                {% for claim, user, item in recent_claims %}
+                    <li>
+                        <strong>Claim by {{ user.first_name }} {{ user.last_name }}</strong> on <em>{{ item.name }}</em>
+                        <br>
+                        Status: {{ claim.status }} - Submitted on: {{ claim.created_at.strftime('%Y-%m-%d') }}
+                    </li>
                 {% endfor %}
             </ul>
-            {% else %}
-            <p>No recent claims to display.</p>
-            {% endif %}
         </section>
     </main>
 </body>
