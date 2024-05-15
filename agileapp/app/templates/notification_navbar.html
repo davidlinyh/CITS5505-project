@@ -48,6 +48,7 @@
                                 <a class="dropdown-item" href="#">{{ notification.message }}</a>
                                 {% endif %}
                                 {% endfor %}
+                                <a class="dropdown-item disabled text-center" style="font-style: italic; font-size: small; color: grey;">-- no notification --</a>
                             </div>
                             <!-- <div class="dropdown-divider"></div> -->
                             <!-- See All Notifications -->
@@ -83,7 +84,7 @@
                         .then(data => {
                             console.log(data.message);  // Log the response from the server
                             // Refresh notification list and count
-                            refreshNotifications(data);
+                            if(data.unread_notification_count > 0) refreshNotifications(data);
                         })
                         .catch(error => {
                             console.error('Error handling notification click:', error);

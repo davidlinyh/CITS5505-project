@@ -282,7 +282,7 @@ def notification_clicked():
     db.session.execute(update_query)
     db.session.commit()  
     # print('clicked');
-    return jsonify({'message': 'Notification click handled successfully', 'all_notifications': get_all_notifications(current_user)})
+    return jsonify({'message': 'Notification click handled successfully', 'all_notifications': get_all_notifications(current_user), 'unread_notifications_count':get_unread_notification_count(current_user)})
 
 @app.route('/notification_navbar')
 @login_required
