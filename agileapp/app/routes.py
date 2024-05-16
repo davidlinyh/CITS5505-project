@@ -300,7 +300,7 @@ def handle_connect():
 def notify_user_claim_response(claim):
     user = User.query.filter_by(id=claim.claimer_id).first()
 
-    message = f"You claim has been {claim.status}."
+    message = f"Your claim has been {claim.status}."
     notification = Notification(message=message, user_id=user.id, unread=True)
     db.session.add(notification)
     db.session.commit()
