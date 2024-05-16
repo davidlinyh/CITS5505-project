@@ -144,7 +144,7 @@ def new_item():
                         admin_id=current_user.id)
         files = request.files.getlist('photos')
         photo_paths_array = []
-        if files:
+        if files  and files[0].filename:
             for index, file in enumerate(files):
                 _, file_extension = os.path.splitext(file.filename)
                 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -173,7 +173,22 @@ def admin_edit_item(item_id):
             item.name = request.form.get('name', item.name)
             item.description = request.form.get('description', item.description)
             item.tags = request.form.get('tags', item.tags)
-            item.photo_paths = request.form.get('photo_paths', item.photo_paths)
+
+            # Handle multiple photos upload
+            files = request.files.getlist('photos')
+            photo_paths_array = []
+            print('filesssssss')
+            print(files)
+            if files and files[0].filename:
+                for index, file in enumerate(files):
+                    _, file_extension = os.path.splitext(file.filename)
+                    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                    filename = secure_filename(timestamp+'_'+str(index)+file_extension)
+                    file_path = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
+                    file.save(file_path)
+                    photo_paths_array.append(filename)
+                item.photo_paths = array_to_string(photo_paths_array)
+
             db.session.commit()
             flash('Item updated successfully!', 'success')
             return redirect(url_for('admin_manage_items'))
