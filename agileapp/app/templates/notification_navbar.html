@@ -38,21 +38,27 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Notifications <span id="notificationCount" class="badge badge-pill badge-primary">{% if unread_notifications_count > 0 %} {{unread_notifications_count }} {% endif %}</span>
+                            Notifications <span id="notificationCount" class="badge badge-pill badge-primary">{% if
+                                unread_notifications_count > 0 %} {{unread_notifications_count }} {% endif %}</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="notificationDropdown">
                             <div id="allNotifications">
                                 {% for notification in all_notifications %}
-                                {% if notification.unread == True %}<a class="dropdown-item unread-notification" href="#">{{notification.message}}</a> 
+                                {% if notification.unread == True %}<a class="dropdown-item unread-notification"
+                                    href="#">{{notification.message}}</a>
                                 {% else %}
                                 <a class="dropdown-item" href="#">{{ notification.message }}</a>
                                 {% endif %}
                                 {% endfor %}
-                                <a class="dropdown-item disabled text-center" style="font-style: italic; font-size: small; color: grey;">-- no notification --</a>
                             </div>
-                            <!-- <div class="dropdown-divider"></div> -->
-                            <!-- See All Notifications -->
-                            <!-- <a class="dropdown-item" href="#">See All Notifications</a> -->
+                            {% if (all_notifications | length) <= 0 %} <a id="noNotification"
+                                class="dropdown-item disabled text-center"
+                                style="font-style: italic; font-size: small; color: grey;">-- no notification --</a>
+                                {% endif %}
+
+                                <!-- <div class="dropdown-divider"></div> -->
+                                <!-- See All Notifications -->
+                                <!-- <a class="dropdown-item" href="#">See All Notifications</a> -->
                         </div>
                     </li>
                 </ul>
@@ -84,7 +90,7 @@
                         .then(data => {
                             console.log(data.message);  // Log the response from the server
                             // Refresh notification list and count
-                            if(data.unread_notification_count > 0) refreshNotifications(data);
+                            refreshNotifications(data);
                         })
                         .catch(error => {
                             console.error('Error handling notification click:', error);
@@ -104,7 +110,7 @@
             refreshNotifications(data);
         });
 
-        function refreshNotifications(data){
+        function refreshNotifications(data) {
             var allNotificationsContainer = document.getElementById('allNotifications');
             allNotificationsContainer.innerHTML = '';
 
@@ -112,15 +118,24 @@
             all_notifications.forEach(notification => {
                 var notificationElement = document.createElement('div');
                 notificationElement.classList.add('dropdown-item');
-                if(notification.unread) notificationElement.classList.add('unread-notification');
+                if (notification.unread) notificationElement.classList.add('unread-notification');
                 notificationElement.textContent = notification.message;
                 allNotificationsContainer.appendChild(notificationElement);
             });
 
-            // Function to update notification count
-            if(data.unread_notification_count > 0) {
+            // Function to update notification count badge
+            if (data.unread_notification_count > 0) {
                 document.getElementById("notificationCount").innerText = data.unread_notification_count;
-            } else document.getElementById("notificationCount").innerText = '';
+            } else {
+                document.getElementById("notificationCount").innerText = '';
+            }
+
+            // Function to update no-notification text
+            if (data.all_notifications.length > 0) {
+                document.getElementById("noNotification").innerText = '';
+            } else {
+                document.getElementById("noNotification").innerText = '-- no notification --';
+            }
         }
     </script>
 
