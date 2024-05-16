@@ -66,8 +66,13 @@ def register():
 @app.route('/gallery')
 @login_required
 def gallery():
-    items = LostItem.query.all() # Fetch all lost items from the database
-    return render_template('gallery.html', items=items)
+    items = LostItem.query.all() # Fetch all lost items from the 
+    list_photo_paths = {}
+    for item in items:
+        list_photo_paths[str(item.id)] = json.loads(item.photo_paths)
+        print(json.loads(item.photo_paths)[0])
+    # print(list_photo_paths)    
+    return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
 
 @app.route('/account')
 @login_required
@@ -95,7 +100,8 @@ def manage_account():
 @login_required
 def item(item_id):
     item = LostItem.query.get_or_404(item_id) # Fetch the item or return 404 if not found
-    return render_template('item.html', item_id=item_id, item=item)
+    photo_paths = json.loads(item.photo_paths)
+    return render_template('item.html', item_id=item_id, item=item, photo_paths=photo_paths)
 
 
 @app.route('/admin/index')
@@ -145,7 +151,7 @@ def new_item():
                 filename = secure_filename(timestamp+'_'+str(index)+file_extension)
                 file_path = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
                 file.save(file_path)
-                photo_paths_array.append(file_path)
+                photo_paths_array.append(filename)
             item.photo_paths = array_to_string(photo_paths_array)
 
         db.session.add(item)
