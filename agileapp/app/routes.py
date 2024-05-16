@@ -56,6 +56,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        notify_admin_new_user(user) #NOTIFICATION TO ADMIN ON NEW USER REGISTRATION
         flash('Registration Success! Please Log in to continue.')
         return redirect(url_for('login'))
     print(form.data)
@@ -202,6 +203,8 @@ def edit_claim(claim_id):
         if new_status == 'Approved':
             update_item_status(claim.item_id)
         db.session.commit()
+
+        notify_user_claim_response(claim)
         flash('Claim status updated successfully.', 'success')
         return redirect(url_for('admin_claims'))
 
@@ -226,7 +229,7 @@ def submit_claim():
     # Process and save the evidence photo
     if evidence_photo_path:
         filename = secure_filename(evidence_photo_path.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        filepath = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
         evidence_photo_path.save(filepath)
 
     # Create and save the claim
@@ -234,12 +237,14 @@ def submit_claim():
         item_id=item_id,
         claimer_id=current_user.id,
         claimer_description=description,
-        evidence_photo_paths=filename if evidence_photo_path else None,
+        evidence_photo_paths=filepath if evidence_photo_path else None,
         status='waiting_approval'
     )
     db.session.add(claim)
     db.session.commit()
 
+    lost_item = LostItem.query.filter_by(id=item_id).first()
+    notify_admin_new_claim(lost_item)
     flash('Your claim has been submitted successfully.', 'success')
     return redirect(url_for('item', item_id=item_id))  # Redirect back to the item page
 
@@ -254,3 +259,109 @@ def admin_delete_item(item_id):
     db.session.commit()
     flash('Item deleted successfully.', 'success')
     return redirect(url_for('admin_manage_items'))
+
+
+
+##################################################################################################################
+# Handle Notifications
+##################################################################################################################
+
+from flask_socketio import SocketIO, join_room, leave_room, emit
+from flask import jsonify
+from sqlalchemy import update
+from app.models import  Notification
+socketio = SocketIO(app)
+
+
+@app.route('/notification_clicked', methods=['POST'])
+def notification_clicked():
+    # Perform any necessary operations in response to the notification click
+    update_query = update(Notification).where(Notification.user_id == current_user.id, Notification.unread == True).values(unread=False)
+
+    # Execute the update query
+    db.session.execute(update_query)
+    db.session.commit()  
+    # print('clicked');
+    return jsonify({'message': 'Notification click handled successfully', 'all_notifications': get_all_notifications(current_user), 'unread_notifications_count':get_unread_notification_count(current_user)})
+
+@app.route('/notification_navbar')
+@login_required
+def admin_notification_navbar():
+    all_notifications =  Notification.query.filter_by(user_id=current_user.id).order_by(Notification.unread.desc(), Notification.created_at.desc()).limit(10).all()
+    unread_notifications_count = Notification.query.filter_by(user_id=current_user.id, unread=True).count()
+    return render_template('notification_navbar.html', all_notifications = all_notifications, unread_notifications_count=unread_notifications_count)
+
+@socketio.on('connect')
+def handle_connect():
+    if current_user.is_authenticated: #
+        join_room(current_user.id)  # Join user's room on connect
+
+
+def notify_user_claim_response(claim):
+    user = User.query.filter_by(id=claim.claimer_id).first()
+
+    message = f"Your claim has been {claim.status}."
+    notification = Notification(message=message, user_id=user.id, unread=True)
+    db.session.add(notification)
+    db.session.commit()
+
+    socketio.emit('new_notification', {
+        'message': message, 
+        'new_notification':message, 
+        'unread_notification_count':get_unread_notification_count(user), 
+        'all_notifications': get_all_notifications(user),
+    }, room=user.id)  # Emit the new notification to the user's room
+
+def notify_admin_new_claim(lost_item):
+    alladmins = User.query.filter_by(previlage='admin').all()
+
+    for admin in alladmins:
+        message = f"{lost_item.name} has new claim."
+        notification = Notification(message=message, user_id=admin.id, unread=True)
+        db.session.add(notification)
+        db.session.commit()
+
+        socketio.emit('new_notification', {
+            'message': message, 
+            'new_notification':message, 
+            'unread_notification_count':get_unread_notification_count(admin), 
+            'all_notifications': get_all_notifications(admin),
+        }, room=admin.id)  # Emit the new notification to the admin's room
+
+def notify_admin_new_user(user):
+    """
+    Create and send notification to all admin about a new user registration.
+    """
+    alladmins = User.query.filter_by(previlage='admin').all()
+
+    for admin in alladmins:
+        message = f"New user {user.email} has registered."
+        notification = Notification(message=message, user_id=admin.id, unread=True)
+        db.session.add(notification)
+        db.session.commit()
+
+        socketio.emit('new_notification', {
+            'message': message, 
+            'new_notification':message, 
+            'unread_notification_count':get_unread_notification_count(admin), 
+            'all_notifications': get_all_notifications(admin),
+        }, room=admin.id)  # Emit the new notification to the admin's room
+
+def get_unread_notification_count(user):
+    return Notification.query.filter_by(user_id=user.id, unread=True).count()
+
+
+# convert to dictionary
+def get_all_notifications(user):
+    notifications_query_result = Notification.query.filter_by(user_id=user.id).order_by(Notification.unread.desc(), Notification.created_at.desc()).limit(10).all()
+    notifications = [
+        {
+            'id': n.id,
+            'message': n.message,
+            'user_id': n.user_id,
+            'unread': n.unread,
+            'created_at': str(n.created_at),
+        }
+        for n in notifications_query_result]
+    return notifications
+
