@@ -30,6 +30,6 @@ class RegistrationForm(FlaskForm):
 class AddItemForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    photos = FileField('Photos', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
+    photos = FileField('Photos', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Allowed format: jpg, jpeg, png')])
     tags = StringField('Tags', validators=[DataRequired()])
     submit = SubmitField('Publish')
