@@ -180,6 +180,7 @@ def admin_edit_item(item_id):
             item.name = request.form.get('name', item.name)
             item.description = request.form.get('description', item.description)
             item.tags = request.form.get('tags', item.tags)
+            item.status = request.form.get('status', item.status)
 
             # Handle multiple photos upload
             files = request.files.getlist('photos')
