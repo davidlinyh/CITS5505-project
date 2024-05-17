@@ -15,7 +15,25 @@ class Test:
 
     #Function/method names should be sufficient to understand the test case undertaken.
     #LOGIN PAGE TEST___________________________________________________________________________
+    #manage-account PAGE TEST___________________________________________________________________________
+    def test_editButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+        
+        self.driver.get("http://localhost:5000/manage-account")
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "form_button")))
+        self.driver.find_element(By.CLASS_NAME,"form_button").click()
+        try:
+            # Wait for up to 10 seconds for the element to become available
+            first_name = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "first_name")))
+            assert first_name.is_displayed()
+        except NoSuchElementException:
+            print("Test failed: The element was not found") 
+    
 
+'''
     def test_login_correctCredentials(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -68,7 +86,7 @@ class Test:
 
     #REGISTER PAGE TEST___________________________________________________________________________
 
-    '''def test_register_newuser(self):
+    def test_register_newuser(self):
         self.driver.get("http://localhost:5000/register")
         self.driver.find_element(By.NAME,"firstname").send_keys("Adharsh Sundaram")
         self.driver.find_element(By.NAME,"lastname").send_keys("Soudakar")
@@ -85,7 +103,7 @@ class Test:
         
         #Checking current URL and check if registration success message is displayed
         assert self.driver.current_url == "http://localhost:5000/login" and any("Registration Success! Please Log in to continue." in message.text for message in success_message)
-    '''
+    
     def test_register_invalidName(self):
         self.driver.get("http://localhost:5000/register")
         self.driver.find_element(By.NAME,"firstname").send_keys("Adharsh@")
@@ -188,3 +206,5 @@ class Test:
             print("Test passed")
         except NoSuchElementException:
             print("Test failed: Validation error message not displayed")
+''' 
+    
