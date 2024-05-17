@@ -26,7 +26,7 @@ Manage Account
     <div>
         <label for="current_photo">Current Photo:</label>
         <br>
-        <img src="{{ url_for('static', filename=user.photo_path) }}" alt="Profile Image" class="profile-img">
+        <img src="{{ url_for('static', filename='profile_photos/' + current_user.photo_path) }}" alt="Profile Image" class="profile-img">
     </div>
     <div>
         <label for="new_photo">Choose a photo to upload:</label>
