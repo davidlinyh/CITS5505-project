@@ -6,13 +6,16 @@ Gallery
 
 {% block header %}
 Gallery
-{% endblock %}
 
-{% block content %}
 <form method="GET" action="{{ url_for('search_items') }}">
     <input type="text" name="query" placeholder="Search for items" required>
     <input type="submit" value="Search">
 </form>
+
+{% endblock %}
+
+{% block content %}
+
 
 <div class="gallery">
     {% for item in items %}
@@ -24,8 +27,9 @@ Gallery
                         <h3 class="grid_title">{{ item.name }}</h3>
                         <a class="grid_link" href="/item/{{ item.id }}"></a>
                     </div>
-                    <p class="grid_description">{{ item.description }}<br>
-                        Status: {{ item.status }}
+                    <p class="grid_description">
+                        Status: {{ item.status }}<br>
+                        {{ item.description }}
                     </p>
                 {% endfor %}
             {% endif %}

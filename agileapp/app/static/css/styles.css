@@ -283,8 +283,11 @@ hr {
 
 /* gallery styling */
 .gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 2fr));
 	columns: 4;
-	column-gap: 5px;
+	grid-gap: 10px;
+	
 }
 @media (max-width: 1200px) {
 	.gallery {
@@ -303,6 +306,16 @@ hr {
 	position: relative;
 }
 
+.grid:before {
+	border-radius: 5px;
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	
+}
 
 .grid img{
 	width: 100%;

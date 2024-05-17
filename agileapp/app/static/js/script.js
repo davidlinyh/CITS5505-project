@@ -24,9 +24,11 @@ window.onclick = function(event) {
     }
 }
 
+// When a bad request is made for a photo, remove the item from gallery
 function handleImageError(itemId) {
     const itemElement = document.getElementById('item-' + itemId);
     if (itemElement) {
         itemElement.remove();
     }
 }
+
