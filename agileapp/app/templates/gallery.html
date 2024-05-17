@@ -11,12 +11,18 @@ Gallery
 {% block content %}
 <div class="gallery">
     {% for item in items %}
-    <div>
-        <h3>{{ item.name }}</h3>
+    <div class = "grid">
         <img src="{{ item.photo_paths }}" alt="{{ item.name }}" style="width: 100px; height: auto;">
-        <p>{{ item.description }}</p>
-        <p>Status: {{ item.status }}</p>
-        <a href="/item/{{ item.id }}">View Details</a>
+        <div class = "grid_body">
+            <h3 class="grid_title"></div>{{ item.name }}<h3>
+            <p class = "grid-description">{{ item.description }}
+                <br>
+                Status: {{ item.status }}
+                <br>
+                <a href="/item/{{ item.id }}">View Details</a>
+            </p>
+            
+        </div>
     </div>
     {% else %}
     <p>No items found.</p>
