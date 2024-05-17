@@ -73,19 +73,35 @@ def gallery():
 @app.route('/manage-account', methods=['GET', 'POST'])
 @login_required
 def manage_account():
+    print('masuk manage account')
     if request.method == 'POST':
-        # Process form data and update user information
-        current_user.first_name = request.form['first_name']
-        current_user.last_name = request.form['last_name']
-        current_user.email = request.form['email']
-
+        edit_user = db.session.query(User).filter_by(id=current_user.id).first()
+       
         # Handle profile picture update
-        
+        edit_user.first_name = request.form['first_name']
+        edit_user.last_name = request.form['last_name']
+        edit_user.email = request.form['email']
+
+        if request.form['new_password']:
+            edit_user.set_password(request.form['new_password'])
+
+        file = request.files.getlist('photo_path')[0]
+        if file:
+            _, file_extension = os.path.splitext(file.filename)
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+            filename = secure_filename(timestamp+file_extension)
+            file_path = os.path.join(app.config['PROFILE_PHOTO_FOLDER'], filename)
+            file.save(file_path)
+            edit_user.photo_path = filename
 
         db.session.commit()
-        flash('Your account has been updated.', 'success')
-        return redirect(url_for('account'))
+        # flash('Your account has been updated.', 'success')
+        return redirect(url_for('manage_account'))
+    print('sebelum render templaet')
     return render_template('manage-account.html', user=current_user)
+
+
+
 
 @app.route('/item/<int:item_id>')
 @login_required
