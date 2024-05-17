@@ -226,8 +226,14 @@ def edit_claim(claim_id):
         notify_user_claim_response(claim)
         flash('Claim status updated successfully.', 'success')
         return redirect(url_for('admin_claims'))
+    
+    # photo_paths = []
+    # for photo_path in claim.evidence_photo_paths:
+    #     list_photo_paths[str(item.id)] = json.loads(item.photo_paths)
+    #     print(json.loads(item.photo_paths)[0])
+    # json.loads(claim.evidence_photo_paths)
 
-    return render_template('admin/edit-claim.html', claim=claim)
+    return render_template('admin/edit-claim.html', claim=claim, photo_paths=json.loads(claim.evidence_photo_paths))
 
 def update_item_status(item_id):
     item = LostItem.query.get(item_id)
@@ -243,20 +249,49 @@ def submit_claim():
 
     item_id = request.form['item_id']
     description = request.form['claimer_description']
-    evidence_photo_path = request.files['evidence_photo_paths']
+    # evidence_photo_path = request.files['evidence_photo_paths']
+
+
+
+    # form = AddItemForm()
+    # if form.validate_on_submit():
+    #     print("enter validation")
+    #     item = LostItem(name=form.name.data, 
+    #                     description=form.description.data, 
+    #                     tags="default_tags", 
+    #                     photo_paths="", 
+    #                     admin_id=current_user.id)
+        
+
+    files = request.files.getlist('evidence_photo_paths')
+    photo_paths_array = []
+    if files  and files[0].filename:
+        for index, file in enumerate(files):
+            _, file_extension = os.path.splitext(file.filename)
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+            filename = secure_filename(timestamp+'_'+str(index)+file_extension)
+            file_path = os.path.join(app.config['EVIDENCE_PHOTO_FOLDER'], filename)
+            file.save(file_path)
+            photo_paths_array.append(filename)
+        # item.photo_paths = array_to_string(photo_paths_array)
+
+    # db.session.add(item)
+    # db.session.commit()
+
+    
 
     # Process and save the evidence photo
-    if evidence_photo_path:
-        filename = secure_filename(evidence_photo_path.filename)
-        filepath = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
-        evidence_photo_path.save(filepath)
+    # if evidence_photo_path:
+    #     filename = secure_filename(evidence_photo_path.filename)
+    #     filepath = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
+    #     evidence_photo_path.save(filepath)
 
     # Create and save the claim
     claim = Claim(
         item_id=item_id,
         claimer_id=current_user.id,
         claimer_description=description,
-        evidence_photo_paths=filepath if evidence_photo_path else None,
+        evidence_photo_paths=array_to_string(photo_paths_array),
         status='waiting_approval'
     )
     db.session.add(claim)
