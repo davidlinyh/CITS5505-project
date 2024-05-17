@@ -24,7 +24,7 @@
                             <a href="{{ url_for('admin_manage_items') }}">Manage Items</a>
                         {% endif %}
                         <div class="dropdown">
-                            <img class="profile-navbar" src="{{ url_for('static', filename='css/GradHeadshot-070.jpg')  }}" alt="Profile Image" class="profile-img">
+                            <img class="profile-navbar" src="{{ url_for('static', filename='profile_photos/' + current_user.photo_path) }}" alt="Profile Image" class="profile-img">
                             <div class="dropdown-content">
                                 <a href="{{ url_for('manage_account') }}">Manage Account</a>
                                 <a href="{{ url_for('logout') }}">Log Out</a>
