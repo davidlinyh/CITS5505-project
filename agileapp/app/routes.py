@@ -148,7 +148,7 @@ def new_item():
         db.session.add(item)
         db.session.commit()
 
-        return redirect(url_for('admin/manage-items.html'))
+        return redirect(url_for('admin_manage_items'))
 
     return render_template('/admin/new-item.html', form=form)
 
