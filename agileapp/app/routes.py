@@ -9,6 +9,7 @@ from app.forms import LoginForm, RegistrationForm, AddItemForm
 from app.models import User, LostItem, Claim
 import os
 import json
+import html
 
 def array_to_string(arr): return json.dumps(arr)
 def string_to_array(s): return json.loads(s)
@@ -21,11 +22,11 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = db.session.scalar(sa.select(User).where(User.email == form.email.data))
+        user = db.session.scalar(sa.select(User).where(User.email == html.escape(form.email.data)))
         if user is None:
             flash('User not found. Please register first.', 'info')
             return redirect(url_for('login'))
-        if not user.check_password(form.password.data):
+        if not user.check_password(html.escape(form.password.data)):
             flash('Invalid password', 'error')
             return redirect(url_for('login'))
 
@@ -48,8 +49,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         print("enter validation")
-        user = User(first_name=form.firstname.data, last_name=form.lastname.data, email=form.email.data)
-        user.set_password(form.password.data)
+        user = User(first_name=html.escape(form.firstname.data), last_name=html.escape(form.lastname.data), email=html.escape(form.email.data))
+        user.set_password(html.escape(form.password.data))
         db.session.add(user)
         db.session.commit()
         notify_admin_new_user(user) #NOTIFICATION TO ADMIN ON NEW USER REGISTRATION
@@ -75,9 +76,9 @@ def gallery():
 def manage_account():
     if request.method == 'POST':
         # Process form data and update user information
-        current_user.first_name = request.form['first_name']
-        current_user.last_name = request.form['last_name']
-        current_user.email = request.form['email']
+        current_user.first_name = html.escape(request.form['first_name'])
+        current_user.last_name = html.escape(request.form['last_name'])
+        current_user.email = html.escape(request.form['email'])
 
         # Handle profile picture update
         
@@ -128,8 +129,8 @@ def new_item():
     form = AddItemForm()
     if form.validate_on_submit():
         print("enter validation")
-        item = LostItem(name=form.name.data, 
-                        description=form.description.data, 
+        item = LostItem(name=html.escape(form.name.data), 
+                        description=html.escape(form.description.data), 
                         tags="default_tags", 
                         photo_paths="", 
                         admin_id=current_user.id)
@@ -161,9 +162,9 @@ def admin_edit_item(item_id):
     item = db.session.query(LostItem).filter_by(id=item_id).first()
     if request.method == 'POST':
         if item:
-            item.name = request.form.get('name', item.name)
-            item.description = request.form.get('description', item.description)
-            item.tags = request.form.get('tags', item.tags)
+            item.name = html.escape(request.form.get('name', item.name))
+            item.description = html.escape(request.form.get('description', item.description))
+            item.tags = html.escape(request.form.get('tags', item.tags))
 
             # Handle multiple photos upload
             files = request.files.getlist('photos')
