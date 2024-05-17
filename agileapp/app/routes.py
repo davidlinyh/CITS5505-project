@@ -337,6 +337,26 @@ def view_claims():
     user_claims = db.session.query(Claim, LostItem).join(LostItem, Claim.item_id == LostItem.id).filter(Claim.claimer_id == current_user.id).all()
     return render_template('view-claims.html', claims=user_claims)
 
+@app.route('/search', methods=['GET'])
+@login_required
+def search_items():
+    query = request.args.get('query', '')
+    items = []
+    list_photo_paths = {}
+
+    if query:
+        search = "%{}%".format(query)
+        items = db.session.query(LostItem).filter(
+            LostItem.name.ilike(search) |
+            LostItem.description.ilike(search) |
+            LostItem.tags.ilike(search)
+        ).all()
+
+        for item in items:
+            list_photo_paths[str(item.id)] = json.loads(item.photo_paths)
+
+    return render_template('search-results.html', items=items, query=query, list_photo_paths=list_photo_paths)
+
 ##################################################################################################################
 # Handle Notifications
 ##################################################################################################################
