@@ -218,7 +218,7 @@ def edit_claim(claim_id):
         claim.status = new_status
         claim.admin_response = new_response  # Update the admin_response field
 
-        if new_status == 'Approved':
+        if new_status == 'approved':
             update_item_status(claim.item_id)
 
         db.session.commit()
