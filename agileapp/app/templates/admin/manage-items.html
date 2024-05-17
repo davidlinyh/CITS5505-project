@@ -1,41 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    <title>Manage Lost Items</title>
-</head>
-<body>
-    <header>
-        <h1>Manage Lost Items</h1>
-    </header>
-    <main>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Tags</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.tags }}</td>
-                    <td>{{ item.status }}</td>
-                    <td>
-                        <a href="/admin/edit-item/{{ item.id }}">Edit</a>
-                        <!-- Additional actions like Archive could be added here -->
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+Manage Items
+{% endblock %}
+
+{% block header %}
+Manage Lost Items
+{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Tags</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.tags }}</td>
+            <td>{{ item.status }}</td>
+            <td>
+                <a href="/admin/edit-item/{{ item.id }}">Edit</a>
+                <!-- Additional actions like Archive could be added here -->
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
