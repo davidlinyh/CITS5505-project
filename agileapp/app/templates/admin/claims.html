@@ -15,16 +15,26 @@ Manage Claims
             <th>Claim ID</th>
             <th>Item Name</th>
             <th>Claimer</th>
+            <th>Description</th>
+            <th>Evidence</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        {% for claim in claims %}
+        {% for claim, user, item in claims %}
         <tr>
             <td>{{ claim.id }}</td>
-            <td>{{ claim.item_id }}</td> <!-- You might want to fetch item details here -->
-            <td>{{ claim.claimer_id }}</td> <!-- Consider displaying the claimer's name or username -->
+            <td>{{ item.name }}</td>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ claim.claimer_description }}</td>
+            <td>
+                {% if claim.evidence_photo_paths %}
+                    <a href="{{ url_for('static', filename=claim.evidence_photo_paths) }}">View Evidence</a>
+                {% else %}
+                    No Evidence Provided
+                {% endif %}
+            </td>
             <td>{{ claim.status }}</td>
             <td>
                 <a href="{{ url_for('edit_claim', claim_id=claim.id) }}">Edit</a>
@@ -32,5 +42,6 @@ Manage Claims
         </tr>
         {% endfor %}
     </tbody>
+    
 </table>
 {% endblock %}
