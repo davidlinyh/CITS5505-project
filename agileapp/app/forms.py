@@ -13,7 +13,7 @@ def checkNames(form,field):
     
 def checkPassword(form,field):
     if not re.search("[!@#$%^&*(),.?:}{\"|<>]",field.data):
-        raise ValidationError("Password should contain atleast one special character")
+        raise ValidationError("Password should contain atleast one special character.")
     
 
 class LoginForm(FlaskForm):
