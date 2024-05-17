@@ -139,6 +139,11 @@ hr {
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
+.unread-notification {
+	font-weight: bold;
+	color: rgb(89, 115, 165);
+}
+
 /* Reduced padding for medium screens */
 @media (max-width: 1100px) {
     .nav-menu a {
@@ -399,3 +404,4 @@ hr {
 	text-decoration: none;
 	cursor: pointer;
 }
+

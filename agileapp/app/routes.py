@@ -64,10 +64,12 @@ def register():
 def gallery():
     items = LostItem.query.all() # Fetch all lost items from the 
     list_photo_paths = {}
+    
     for item in items:
         list_photo_paths[str(item.id)] = json.loads(item.photo_paths)
         print(json.loads(item.photo_paths)[0])
-    # print(list_photo_paths)    
+    # print(list_photo_paths)  
+      
     return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
 
 @app.route('/manage-account', methods=['GET', 'POST'])

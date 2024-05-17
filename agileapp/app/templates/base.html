@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Default Title{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
     <body>
         <header>
@@ -18,11 +18,39 @@
                         <div class="nav-menu-title">Lost and Found</div>
                         <div class="vertical-rule-nav"></div>
                         <a href="{{ url_for('gallery') }}">Gallery</a>
+                        {% if current_user.previlage == 'claimer' %}
+                            <a href="{{ url_for('view_claims') }}">Claims</a>
+                        {% endif %}
                         {% if current_user.previlage == 'admin' %}
                             <a href="{{ url_for('admin_claims') }}">Claims</a>
                             <a href="{{ url_for('new_item') }}">New Item</a>
                             <a href="{{ url_for('admin_manage_items') }}">Manage Items</a>
                         {% endif %}
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Notifications <span id="notificationCount" class="badge badge-pill badge-primary">{% if unread_notifications_count > 0 %}{{ unread_notifications_count }}{% endif %}</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="notificationDropdown">
+                                <div id="allNotifications">
+                                    {% for notification in all_notifications %}
+                                        {% if notification.unread == True %}
+                                            <a class="dropdown-item unread-notification" href="#">{{ notification.message }}</a>
+                                        {% else %}
+                                            <a class="dropdown-item" href="#">{{ notification.message }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% if all_notifications | length <= 0 %}
+                                    <a id="noNotification" class="dropdown-item disabled text-center" style="font-style: italic; font-size: small; color: grey;">-- no notification --</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                
+                        
+
+
+
                         <div class="dropdown">
                             <img class="profile-navbar" src="{{ url_for('static', filename='css/GradHeadshot-070.jpg')  }}" alt="Profile Image" class="profile-img">
                             <div class="dropdown-content">
