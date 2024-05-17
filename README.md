@@ -8,12 +8,15 @@ This project is a basic Flask application.
 Before you begin, ensure you have met the following requirements:
 - You have a `Windows/Linux/Mac` machine.
 - You have installed Python 3.6 or higher.
+- Run the terminal as Administrator
 
 ## Installing Our Flask App
 To install Our Flask App, follow these steps:
 
 ## Clone the Repository
 `git clone https://github.com/davidlinyh/CITS5505-project`
+or
+Download the zip source.
 
 ## Navigate to Project Directory
 `cd CITS5505-project/agileapp`
@@ -25,12 +28,29 @@ This step is optional but recommended. To create a virtual environment, run the 
 ```
 python3 -m venv venv
 ```
+or 
+```
+python -m venv venv
+```
+or
+```
+py -m venv venv
+```
 
 To activate the virtual environment, run one of the following commands depending on your operating system:
+LINUX or MACOS:
 ```
-source venv/bin/activate    # Linux or macOS
-venv/Scripts/activate       # Windows
+source venv/bin/activate     
 ```
+WINDOWS:
+```
+venv/Scripts/activate       
+```
+or try this if it doesn't work:
+```
+venv\Scripts\Activate.ps1      
+```
+
 If you are on Windows and unable to activate virtual environment, according to Microsoft Tech Support, it is related to setting Execution Policy. Try the following:
 ```
 Set-ExecutionPolicy Unrestricted -Force
