@@ -23,3 +23,10 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+function handleImageError(itemId) {
+    const itemElement = document.getElementById('item-' + itemId);
+    if (itemElement) {
+        itemElement.remove();
+    }
+}

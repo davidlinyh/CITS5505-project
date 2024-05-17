@@ -18,7 +18,10 @@
                         <div class="nav-menu-title">Lost and Found</div>
                         <div class="vertical-rule-nav"></div>
                         <a href="{{ url_for('gallery') }}">Gallery</a>
-                        {% if current_user.previlage == 'admin' %}
+                        {% if current_user.previlage == 'claimer' %}
+                            <a href="{{ url_for('view_claims') }}">Claims</a>
+                        {% endif %}
+                            {% if current_user.previlage == 'admin' %}
                             <a href="{{ url_for('admin_claims') }}">Claims</a>
                             <a href="{{ url_for('new_item') }}">New Item</a>
                             <a href="{{ url_for('admin_manage_items') }}">Manage Items</a>
@@ -40,8 +43,8 @@
         <div class="page-header">
             <h2>{% block header %}Default Header{% endblock %}</h2>
         </div>
-        <!--container for content-->
 
+        <!--container for content-->
         <div class="content-container">
             {% block content %}
 

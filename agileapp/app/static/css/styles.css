@@ -284,7 +284,7 @@ hr {
 /* gallery styling */
 .gallery {
 	columns: 4;
-	column-gap: 16px;
+	column-gap: 5px;
 }
 @media (max-width: 1200px) {
 	.gallery {
@@ -303,16 +303,6 @@ hr {
 	position: relative;
 }
 
-.grid:before {
-	border-radius: 5px;
-	content: '';
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background-color: rgba(0, 0, 0, .2);
-}
 
 .grid img{
 	width: 100%;
@@ -349,6 +339,7 @@ hr {
 	display: flex;
 	flex-direction: column;
 }
+
 
 /* if we introduce tag feature */
 /* .grid_tag {

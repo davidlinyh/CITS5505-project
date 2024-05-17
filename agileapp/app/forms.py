@@ -31,5 +31,5 @@ class AddItemForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     photos = FileField('Photos', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Allowed format: jpg, jpeg, png')])
-    tags = StringField('Tags', validators=[DataRequired()])
+    tags = StringField('Tags (separate by comma no whitespace)', validators=[DataRequired()])
     submit = SubmitField('Publish')
