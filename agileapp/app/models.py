@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     previlage = db.Column(db.String(128))
     first_name = db.Column(db.String(128))
     last_name = db.Column(db.String(128))
-    photo_path = db.Column(db.String(128))
+    photo_path = db.Column(db.String(128), default="sample_profile_photo.jpg")
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 

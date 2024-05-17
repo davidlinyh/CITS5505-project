@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery</title>
 </head>
+
 <body>
     <header>
         <!-- navbar-->
         <nav class="navbar">
             <div class="nav-menu">
                 <ul>
-                    <li class="nav-menu-title">UWA Lost and Found</li> 
+                    <li class="nav-menu-title">UWA Lost and Found</li>
                     <li><a href="/">Home</a></li>
                     <li><a href="/gallery">Gallery</a></li>
                     <li><a href="#">History</a></li>
@@ -19,11 +21,11 @@
                         <div class="dropdown">
                             <button class="dropbtn"><img src="" alt="Account Image"></button>
                             <div class="dropdown-content">
-                              <a href="/account">View Profile</a>
-                              <a href="/manage-account>Manage Account</a>
-                              <a href="#">Sign Out</a>
+                                <a href="/account">View Profile</a>
+                                <a href="/manage-account>Manage Account</a>
+                              <a href=" #">Sign Out</a>
                             </div>
-                          </div> 
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -34,6 +36,10 @@
             {% for item in items %}
             <div>
                 <h3>{{ item.name }}</h3>
+                {% for photo_path in list_photo_paths[item.id|string] %}
+                <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image of {{ item.name }}"
+                    width="300">
+                {% endfor %}
                 <img src="{{ item.photo_paths }}" alt="{{ item.name }}" style="width: 100px; height: auto;">
                 <p>{{ item.description }}</p>
                 <p>Status: {{ item.status }}</p>
@@ -45,4 +51,5 @@
         </main>
     </div>
 </body>
+
 </html>
