@@ -11,7 +11,7 @@
         <div class="container">
             <div class="container-header">
                 <img class="logo" src="{{ url_for('static', filename='css/SGlogo.PNG') }}" alt="Student Guild Logo">
-                <h2 class="form-heading">Lost and Found Portal - Register</h2>
+                <h2 class="form-heading">Lost and Found Portal</h2>
             </div>
             <div class="container-text">
                 <h3>Register</h3>
@@ -53,19 +53,22 @@
                         {% endfor %}
                     </div>
                     <div>
-                        {{ form.submit(class_='button') }}
+                        {{ form.submit(class_='form_button') }}
                     </div>
                 </form>
                 <p class="switch-login-register">
                     Already have an account? <a href="{{ url_for('login') }}">Login here</a>
                 </p>
-                <div class="additional-text">
+                <hr>
+                <footer class ="additional-text">
                     <p>If you have found an item, please return it to the Guild Office located at:</p>
                     <address>
                         UWA Student Guild Office, 1 Hackett Drive, Crawley WA 6009
                     </address>
-                    <p>For any enquiries, please <a href="https://www.uwastudentguild.com/contact" target="_blank">contact us</a>.</p>
-                </div>
+                    <p>For any enquiries, please <a href="https://www.uwastudentguild.com/contact" target="blank">contact us</a>.</p>
+                    <br>
+                    <p >© 2024 UWA Student Guild. All rights reserved.</p>
+                </footer>
             </div>
         </div>
     </div>

@@ -14,10 +14,6 @@ def array_to_string(arr): return json.dumps(arr)
 def string_to_array(s): return json.loads(s)
 
 @app.route('/')
-@app.route('/index')
-def index():
-    return render_template('index.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -48,7 +44,7 @@ def logout():
 def register():
     print('enter register')
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('gallery'))
     form = RegistrationForm()
     if form.validate_on_submit():
         print("enter validation")
@@ -73,11 +69,6 @@ def gallery():
         print(json.loads(item.photo_paths)[0])
     # print(list_photo_paths)    
     return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
-
-@app.route('/account')
-@login_required
-def account():
-    return render_template('account.html', user=current_user)
 
 @app.route('/manage-account', methods=['GET', 'POST'])
 @login_required
@@ -132,7 +123,7 @@ def admin_manage_items():
 @login_required
 def new_item():
     if not current_user.previlage == 'admin':
-        return redirect(url_for('index'))
+        return redirect(url_for('gallery'))
     
     form = AddItemForm()
     if form.validate_on_submit():
@@ -157,7 +148,7 @@ def new_item():
         db.session.add(item)
         db.session.commit()
 
-        return redirect(url_for('admin_manage_items'))
+        return redirect(url_for('admin/manage-items.html'))
 
     return render_template('/admin/new-item.html', form=form)
 

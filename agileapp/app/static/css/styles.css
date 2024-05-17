@@ -1,5 +1,3 @@
-/* UWA Color: #27348B */
-
 * {
     margin: 0;
     padding: 0;
@@ -20,32 +18,55 @@ h3{
 	font-size:x-large;
 	color: black;
 	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+hr {
+	
+	border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	margin-top: 20px;
+	margin-bottom: 10px;
+	margin-right: 5%;
+	margin-left: 5%;
+
 }
 
 /* navbar styling */
 .navbar{
 	position: fixed;
 	width: 100%;
-	
+	height: 80px;
+
 	display: flex;
-	height: 9%;
-	align-items: center;
+	flex-direction: row;
+	
 	
 	border-bottom: 1px solid #233382;
 	background-color: #233382;
 	z-index: 1000;
-	box-sizing: border-box;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	
+}
+
+.nav-items{
+	width: 100%;
+	margin-left: 8%;
+	margin-right: 8%;
 }
 
 .nav-menu{
 	display: flex;
 	position: static;
 	width: 100%;
-	max-height: 100%;
-	background: none;
+	height: 100%;
 	
+	background: none;
     align-items: center; 
+	padding-bottom: 5px;
 	font-size: 19.5px;
 	font-weight: bolder;
 }
@@ -54,54 +75,74 @@ h3{
     
 	font-size: x-large;
     color: white;
-	padding-left: 5vb;
+	padding-left: 20px;
+	text-align: center;
 	
 }
 
 .nav-menu a{
 
     display: block;
-    padding: 20px 80px;
+    padding: 20px 10px;
     color: white;
     text-decoration: none;
+	text-align: center;
+	
 }
 
-.nav-menu ul {
-    display: flex;  
-    list-style: none; 
-    padding: 0; 
-    margin: 0; 
-	
+.vertical-rule-nav {
+	border-left: 1px solid rgba(255, 255, 255, 0.3);
+	height: 60%;
+	margin:  20px;
 }
 
 .nav-menu a:hover{
-	background-color: #1f2a74;
-	
+	background-color: #1f2a74;	
 }
 
 .logo-navbar {	
-	width: 10vb;
-	height: 100%;
-	object-fit:cover;
-	padding-left: 2%;	
+	width: 70px; 
+	height: 70px;
+	object-fit: scale-down;
 }
 
 .dropdown-content{
 	display: none;
 	background-color: #233382;
+	border:1px solid rgba(255, 255, 255, 0.3);
 	position: absolute;
 	min-width: 160px;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	
+}
+
+/* profile image location */
+.dropdown {
+	margin-top: 2vb;
+	margin-left: auto;
+	margin-right: 2vb;
+	margin-bottom: 0.5vb;
 }
 
 .dropdown:hover .dropdown-content {
 	display: block;
+	flex-direction: column;
+	font-size: large;
   }
+
+
+.profile-navbar {
+  width: 50px; 
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
 
 /* Reduced padding for medium screens */
 @media (max-width: 1100px) {
-    .nav-menu a, .nav-menu-title {
-        padding: 20px 20px;  
+    .nav-menu a {
+        padding: 1.3vb 10px;  
     }
 	.nav-menu-title {
 		align-items:start;
@@ -109,7 +150,12 @@ h3{
 	}
 }
 
-/* Minimal padding for small screens */
+/* JS listen and change page scroll*/
+@media (max-width: 893px) {
+	/* JS listen and change page scroll*/
+}
+
+/* Minimal padding for small screens
 @media (max-width: 570px) {
     .nav-menu a {
         padding: 10px 20px;  
@@ -117,7 +163,7 @@ h3{
 	.nav-menu-title {
 		padding: 0px 20px;
 	}
-}
+} */
 
 /* container for login/register pages */
 .container-wrap{
@@ -143,6 +189,7 @@ h3{
 	height: 80px;
 	display: flex;
 	align-items: center;
+	
 	min-height: 10vh;
 	border-bottom: 1px solid #233382;
 	background-color: #233382;
@@ -170,7 +217,7 @@ h3{
 	padding: 2%;
 }
 
-input[type=password], input[type=email] {
+.form-control {
 	width:90%;
 	line-height: 3em;
 	margin:1em;	
@@ -181,19 +228,21 @@ input[type=password], input[type=email] {
 	display: block;
 }
 
-button {
+.form_button {
 	display: block;
 	margin: auto;
 	background-color: #233382;
 	color: #fff;
 	border: none;
+	margin-top: 15px;
+	margin-bottom: 5px;
 	padding: 10px 32px;
 	text-align: center;
 	font-size: 16px;
 	transition-duration: 0.4s;
 }
 
-button:hover {
+.form_button:hover {
 	background-color: #1f2a74;
 }
 
@@ -230,4 +279,123 @@ button:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
     padding: 10px;
     overflow: auto; 
+}
+
+/* gallery styling */
+.gallery {
+	columns: 4;
+	column-gap: 16px;
+}
+@media (max-width: 1200px) {
+	.gallery {
+		columns: 3;
+   }
+}
+@media (max-width: 992px) {
+	.gallery {
+		columns: 2;
+   }
+}
+
+.grid {
+	display: inline-block;
+	margin-bottom: 16px;
+	position: relative;
+}
+
+.grid:before {
+	border-radius: 5px;
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, .2);
+}
+
+.grid img{
+	width: 100%;
+	border-radius: 5px;
+}
+
+.grid_title {
+	font-size: 28px;
+	font-weight: bold;
+	margin: 0px 0px 10px 0px;
+}
+
+.grid_description {
+	font-size: 14px;
+	font-weight: 300;
+}
+
+.grid_link {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.grid_body {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	padding: 30px 30px;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+}
+
+/* if we introduce tag feature */
+/* .grid_tag {
+	background-color: rgba(255, 255, 255, .8);
+	color: #333;
+	border-radius: 5px;
+	padding: 5px 15px;
+	margin-bottom: 5px;
+}
+ */
+ 
+
+/* item page styling */
+/* Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto; /* 15% from the top and centered */
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
 }

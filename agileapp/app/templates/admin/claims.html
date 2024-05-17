@@ -1,53 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claims Administration</title>
-</head>
-<body>
-    <header>
-        <h1>Manage Claims</h1>
-        <nav>
-            <a href="{{ url_for('admin_index') }}">Back to Dashboard</a>
-        </nav>
-    </header>
-    <main>
-        <table>
-            <thead>
-                <tr>
-                    <th>Claim ID</th>
-                    <th>Item Name</th>
-                    <th>Claimer</th>
-                    <th>Description</th>
-                    <th>Evidence</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for claim, user, item in claims %}
-                <tr>
-                    <td>{{ claim.id }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ user.first_name }} {{ user.last_name }}</td>
-                    <td>{{ claim.claimer_description }}</td>
-                    <td>
-                        {% if claim.evidence_photo_paths %}
-                            <a href="{{ url_for('static', filename=claim.evidence_photo_paths) }}">View Evidence</a>
-                        {% else %}
-                            No Evidence Provided
-                        {% endif %}
-                    </td>
-                    <td>{{ claim.status }}</td>
-                    <td>
-                        <a href="{{ url_for('edit_claim', claim_id=claim.id) }}">Edit</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            
-        </table>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+Claims Admin
+{% endblock %}
+
+{% block header %}
+Manage Claims
+{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>Item Name</th>
+            <th>Claimer</th>
+            <th>Description</th>
+            <th>Evidence</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for claim, user, item in claims %}
+        <tr>
+            <td>{{ claim.id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ claim.claimer_description }}</td>
+            <td>
+                {% if claim.evidence_photo_paths %}
+                    <a href="{{ url_for('static', filename=claim.evidence_photo_paths) }}">View Evidence</a>
+                {% else %}
+                    No Evidence Provided
+                {% endif %}
+            </td>
+            <td>{{ claim.status }}</td>
+            <td>
+                <a href="{{ url_for('edit_claim', claim_id=claim.id) }}">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    
+</table>
+{% endblock %}
