@@ -17,7 +17,6 @@ Gallery
                 <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image of {{ item.name }}"
                     width="300">
                 {% endfor %}
-                <img src="{{ item.photo_paths }}" alt="{{ item.name }}" style="width: 100px; height: auto;">
                 <p>{{ item.description }}</p>
                 <p>Status: {{ item.status }}</p>
                 <a href="/item/{{ item.id }}">View Details</a>
