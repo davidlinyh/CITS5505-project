@@ -14,10 +14,6 @@ def array_to_string(arr): return json.dumps(arr)
 def string_to_array(s): return json.loads(s)
 
 @app.route('/')
-@app.route('/index')
-def index():
-    return render_template('index.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -48,7 +44,7 @@ def logout():
 def register():
     print('enter register')
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('gallery'))
     form = RegistrationForm()
     if form.validate_on_submit():
         print("enter validation")
@@ -67,11 +63,6 @@ def register():
 def gallery():
     items = LostItem.query.all() # Fetch all lost items from the database
     return render_template('gallery.html', items=items)
-
-@app.route('/account')
-@login_required
-def account():
-    return render_template('account.html', user=current_user)
 
 @app.route('/manage-account', methods=['GET', 'POST'])
 @login_required
@@ -97,13 +88,15 @@ def item(item_id):
     item = LostItem.query.get_or_404(item_id)  # Fetch the item or return 404 if not found
     return render_template('item.html', item=item)
 
-@app.route('/admin/index')
-@app.route('/admin')
-@login_required
-def admin_index():
-    recent_items = LostItem.query.order_by(LostItem.updated_at.desc()).limit(5).all()
-    recent_claims = Claim.query.order_by(Claim.updated_at.desc()).limit(5).all()
-    return render_template('admin/index.html', recent_items=recent_items, recent_claims=recent_claims)
+# index.html deprecated, to be removed
+
+# @app.route('/admin/index')
+# @app.route('/admin')
+# @login_required
+# def admin_index():
+#     recent_items = LostItem.query.order_by(LostItem.updated_at.desc()).limit(5).all()
+#     recent_claims = Claim.query.order_by(Claim.updated_at.desc()).limit(5).all()
+#     return render_template('admin/index.html', recent_items=recent_items, recent_claims=recent_claims)
 
 @app.route('/admin/manage-items', methods=['GET']) 
 @login_required
@@ -115,7 +108,7 @@ def admin_manage_items():
 @login_required
 def new_item():
     if not current_user.previlage == 'admin':
-        return redirect(url_for('index'))
+        return redirect(url_for('gallery'))
     
     form = AddItemForm()
     if form.validate_on_submit():
@@ -140,7 +133,7 @@ def new_item():
         db.session.add(item)
         db.session.commit()
 
-        return redirect(url_for('admin_manage_items'))
+        return redirect(url_for('admin/manage-items.html'))
 
     return render_template('admin/new-item.html', form=form)
 
