@@ -199,16 +199,23 @@ def edit_claim(claim_id):
     claim = Claim.query.get_or_404(claim_id)
     if request.method == 'POST':
         new_status = request.form.get('status')
+        new_response = request.form.get('admin_response')
+        
+        print(f"Updating claim {claim_id} with status: {new_status} and response: {new_response}")  # Debugging statement
+
         claim.status = new_status
+        claim.admin_response = new_response  # Update the admin_response field
+
         if new_status == 'Approved':
             update_item_status(claim.item_id)
+
         db.session.commit()
 
         notify_user_claim_response(claim)
         flash('Claim status updated successfully.', 'success')
         return redirect(url_for('admin_claims'))
 
-    return render_template('/admin/edit-claim.html', claim=claim)
+    return render_template('admin/edit-claim.html', claim=claim)
 
 def update_item_status(item_id):
     item = LostItem.query.get(item_id)
@@ -260,7 +267,11 @@ def admin_delete_item(item_id):
     flash('Item deleted successfully.', 'success')
     return redirect(url_for('admin_manage_items'))
 
-
+@app.route('/view-claims')
+@login_required
+def view_claims():
+    user_claims = db.session.query(Claim, LostItem).join(LostItem, Claim.item_id == LostItem.id).filter(Claim.claimer_id == current_user.id).all()
+    return render_template('view-claims.html', claims=user_claims)
 
 ##################################################################################################################
 # Handle Notifications
