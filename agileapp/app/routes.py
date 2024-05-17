@@ -43,12 +43,10 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    print('enter register')
     if current_user.is_authenticated:
         return redirect(url_for('gallery'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        print("enter validation")
         user = User(first_name=html.escape(form.firstname.data), last_name=html.escape(form.lastname.data), email=html.escape(form.email.data))
         user.set_password(html.escape(form.password.data))
         db.session.add(user)
@@ -56,25 +54,22 @@ def register():
         notify_admin_new_user(user) #NOTIFICATION TO ADMIN ON NEW USER REGISTRATION
         flash('Registration Success! Please Log in to continue.')
         return redirect(url_for('login'))
-    print(form.data)
-    print(form.errors)
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/gallery')
 @login_required
 def gallery():
     items = LostItem.query.all() # Fetch all lost items from the 
+
+    # Create dictionary of photo paths for each item
     list_photo_paths = {}
     for item in items:
-        list_photo_paths[str(item.id)] = json.loads(item.photo_paths)
-        print(json.loads(item.photo_paths)[0])
-    # print(list_photo_paths)    
+        list_photo_paths[str(item.id)] = json.loads(item.photo_paths)   
     return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
 
 @app.route('/manage-account', methods=['GET', 'POST'])
 @login_required
 def manage_account():
-    print('masuk manage account')
     if request.method == 'POST':
         edit_user = db.session.query(User).filter_by(id=current_user.id).first()
        
@@ -96,9 +91,8 @@ def manage_account():
             edit_user.photo_path = filename
 
         db.session.commit()
-        # flash('Your account has been updated.', 'success')
+        flash('Your account has been updated.', 'success')
         return redirect(url_for('manage_account'))
-    print('sebelum render templaet')
     return render_template('manage-account.html', user=current_user)
 
 
@@ -143,8 +137,8 @@ def new_item():
         return redirect(url_for('gallery'))
     
     form = AddItemForm()
+    # Validate form before updating the database
     if form.validate_on_submit():
-        print("enter validation")
         item = LostItem(name=html.escape(form.name.data), 
                         description=html.escape(form.description.data), 
                         tags="default_tags", 
@@ -153,9 +147,10 @@ def new_item():
         files = request.files.getlist('photos')
         photo_paths_array = []
         if files  and files[0].filename:
+            # Handle multiple photos upload
             for index, file in enumerate(files):
                 _, file_extension = os.path.splitext(file.filename)
-                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                timestamp = datetime.now().strftime('%Y%m%d%H%M%S') # Use timestamp as unique filename for each photo
                 filename = secure_filename(timestamp+'_'+str(index)+file_extension)
                 file_path = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
                 file.save(file_path)
@@ -186,12 +181,10 @@ def admin_edit_item(item_id):
             # Handle multiple photos upload
             files = request.files.getlist('photos')
             photo_paths_array = []
-            print('filesssssss')
-            print(files)
             if files and files[0].filename:
                 for index, file in enumerate(files):
                     _, file_extension = os.path.splitext(file.filename)
-                    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                    timestamp = datetime.now().strftime('%Y%m%d%H%M%S') # Use timestamp as unique filename for each photo
                     filename = secure_filename(timestamp+'_'+str(index)+file_extension)
                     file_path = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
                     file.save(file_path)
@@ -231,8 +224,6 @@ def edit_claim(claim_id):
         new_status = request.form.get('status')
         new_response = request.form.get('admin_response')
         
-        print(f"Updating claim {claim_id} with status: {new_status} and response: {new_response}")  # Debugging statement
-
         claim.status = new_status
         claim.admin_response = new_response  # Update the admin_response field
 
@@ -245,12 +236,6 @@ def edit_claim(claim_id):
         flash('Claim status updated successfully.', 'success')
         return redirect(url_for('admin_claims'))
     
-    # photo_paths = []
-    # for photo_path in claim.evidence_photo_paths:
-    #     list_photo_paths[str(item.id)] = json.loads(item.photo_paths)
-    #     print(json.loads(item.photo_paths)[0])
-    # json.loads(claim.evidence_photo_paths)
-
     return render_template('admin/edit-claim.html', claim=claim, photo_paths=json.loads(claim.evidence_photo_paths))
 
 def update_item_status(item_id):
@@ -266,44 +251,19 @@ def submit_claim():
         return redirect(url_for('login'))
 
     item_id = request.form['item_id']
-    description = request.form['claimer_description']
-    # evidence_photo_path = request.files['evidence_photo_paths']
-
-
-
-    # form = AddItemForm()
-    # if form.validate_on_submit():
-    #     print("enter validation")
-    #     item = LostItem(name=form.name.data, 
-    #                     description=form.description.data, 
-    #                     tags="default_tags", 
-    #                     photo_paths="", 
-    #                     admin_id=current_user.id)
-        
+    description = request.form['claimer_description']    
 
     files = request.files.getlist('evidence_photo_paths')
     photo_paths_array = []
     if files  and files[0].filename:
         for index, file in enumerate(files):
             _, file_extension = os.path.splitext(file.filename)
-            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S') # Use timestamp as unique filename for each photo
             filename = secure_filename(timestamp+'_'+str(index)+file_extension)
             file_path = os.path.join(app.config['EVIDENCE_PHOTO_FOLDER'], filename)
             file.save(file_path)
             photo_paths_array.append(filename)
-        # item.photo_paths = array_to_string(photo_paths_array)
-
-    # db.session.add(item)
-    # db.session.commit()
-
-    
-
-    # Process and save the evidence photo
-    # if evidence_photo_path:
-    #     filename = secure_filename(evidence_photo_path.filename)
-    #     filepath = os.path.join(app.config['ITEM_PHOTO_FOLDER'], filename)
-    #     evidence_photo_path.save(filepath)
-
+  
     # Create and save the claim
     claim = Claim(
         item_id=item_id,
@@ -338,6 +298,26 @@ def view_claims():
     user_claims = db.session.query(Claim, LostItem).join(LostItem, Claim.item_id == LostItem.id).filter(Claim.claimer_id == current_user.id).all()
     return render_template('view-claims.html', claims=user_claims)
 
+@app.route('/search', methods=['GET'])
+@login_required
+def search_items():
+    query = request.args.get('query', '')
+    items = []
+    list_photo_paths = {}
+
+    if query:
+        search = "%{}%".format(query)
+        items = db.session.query(LostItem).filter(
+            LostItem.name.ilike(search) |
+            LostItem.description.ilike(search) |
+            LostItem.tags.ilike(search)
+        ).all()
+
+        for item in items:
+            list_photo_paths[str(item.id)] = json.loads(item.photo_paths)
+
+    return render_template('search-results.html', items=items, query=query, list_photo_paths=list_photo_paths)
+
 ##################################################################################################################
 # Handle Notifications
 ##################################################################################################################
@@ -357,7 +337,6 @@ def notification_clicked():
     # Execute the update query
     db.session.execute(update_query)
     db.session.commit()  
-    # print('clicked');
     return jsonify({'message': 'Notification click handled successfully', 'all_notifications': get_all_notifications(current_user), 'unread_notifications_count':get_unread_notification_count(current_user)})
 
 @app.route('/notification_navbar')
@@ -381,6 +360,7 @@ def notify_user_claim_response(claim):
     db.session.add(notification)
     db.session.commit()
 
+    # Emit new notification to the user's room
     socketio.emit('new_notification', {
         'message': message, 
         'new_notification':message, 
@@ -391,6 +371,7 @@ def notify_user_claim_response(claim):
 def notify_admin_new_claim(lost_item):
     alladmins = User.query.filter_by(previlage='admin').all()
 
+    # Create and send notification to all admin about a new claim.
     for admin in alladmins:
         message = f"{lost_item.name} has new claim."
         notification = Notification(message=message, user_id=admin.id, unread=True)
@@ -427,7 +408,7 @@ def get_unread_notification_count(user):
     return Notification.query.filter_by(user_id=user.id, unread=True).count()
 
 
-# convert to dictionary
+# convert to dictionary format
 def get_all_notifications(user):
     notifications_query_result = Notification.query.filter_by(user_id=user.id).order_by(Notification.unread.desc(), Notification.created_at.desc()).limit(10).all()
     notifications = [

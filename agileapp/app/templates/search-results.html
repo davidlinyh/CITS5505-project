@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search Results
+{% endblock %}
+
+{% block header %}
+Search Results for "{{ query }}"
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if items %}
+        <div class="row">
+            {% for item in items %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% for photo_path in list_photo_paths[item.id|string] %}
+                        <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" class="card-img-top" alt="{{ item.name }}" style="width: 100%; height: auto;">
+                        {% endfor %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text">{{ item.description }}</p>
+                            <p><strong>Tags:</strong> {{ item.tags }}</p>
+                            <p><strong>Status:</strong> {{ item.status }}</p>
+                            <a href="/item/{{ item.id }}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            No items found matching your search query.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
