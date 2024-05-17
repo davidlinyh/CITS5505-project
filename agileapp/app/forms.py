@@ -22,10 +22,10 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
-    firstname = StringField('First Name', validators=[DataRequired(), checkNames()])
-    lastname = StringField('Last Name', validators=[DataRequired(), checkNames()])
+    firstname = StringField('First Name', validators=[DataRequired(), checkNames])
+    lastname = StringField('Last Name', validators=[DataRequired(), checkNames])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8,max=30),checkPassword()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8,max=30),checkPassword])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
