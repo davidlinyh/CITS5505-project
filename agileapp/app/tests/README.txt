@@ -4,6 +4,10 @@ NOTE:
 ***************************************************************************************************************************************************************************************
 * Uncomment a test you want to run and copy-paste it below def teardown_method(): or at line 21. (If you run the whole test, it would take some time to run:( ).
 
+* Please have the app running.
+
+* Please install Chrome as I have used Chrome drivers to test.
+
 * While testing, For the Manage-Account page, Paste your Absolute path to agileapp/app/static/profile_photos at line number () or you could have a folder of photos yourself, mine is:
   C:\Users\adhar\Desktop\sem3\cits5505\Group project\1\CITS5505-project\agileapp\app\static\profile_photos
 
