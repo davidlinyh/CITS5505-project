@@ -38,7 +38,7 @@ class RegistrationForm(FlaskForm):
 
 class AddItemForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired(), Length(max=300)])
     photos = FileField('Photos', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Allowed format: jpg, jpeg, png')])
     tags = StringField('Tags (separate by comma no whitespace)', validators=[DataRequired()])
     submit = SubmitField('Publish')
