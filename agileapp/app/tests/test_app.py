@@ -16,8 +16,53 @@ class Test:
         self.driver.quit()
 
     #Function/method names should be sufficient to understand the test case undertaken.
+    #ITEM CLAIM TEST_____________________________________________________________________________________
+'''
+    def test_itemClaim(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
 
-    #CONTACT BUTTON (located in the footer of both login and register page) TEST_________________________________________________________________________________
+        notebook_div = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[h3[text()='Notebook']]")))
+        view_details_link = notebook_div.find_element(By.LINK_TEXT, "View Details")
+        view_details_link.click()
+
+        claimItem_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "claimBtn")))
+        claimItem_button.click()
+
+        description = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "claimer_description")))
+        description.send_keys("These notebooks are mine. I left them in the class.")
+
+        submit_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit']")))
+        submit_button.click()
+
+        self.driver.get("http://localhost:5000/view-claims")
+
+        table_rows = WebDriverWait(self.driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "tbody tr")))
+        claimed_item_found = False
+        for row in table_rows:
+            if "Notebook" in row.text: 
+                claimed_item_found = True
+        
+        assert claimed_item_found
+'''
+    #GALLERY PAGE TEST___________________________________________________________________________________
+'''
+    #Checking for the first item
+    def test_viewDetailsButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        view_details_link = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[1]//a[contains(text(), 'View Details')]")))
+        view_details_link.click()
+
+        assert self.driver.current_url == "http://localhost:5000/item/1"
+'''
+    #CONTACT BUTTON (located in the footer of all pages) TEST_________________________
+'''   
     def test_contactButton(self):
         self.driver.get("http://localhost:5000/login")
 
@@ -29,7 +74,7 @@ class Test:
         self.driver.switch_to.window(new_window_handle)
 
         assert self.driver.current_url == "https://www.uwastudentguild.com/contact"
-
+'''
     #ADMIN: NAV BAR TEST_________________________________________________________________________________
 '''
     def test_galleryButton(self):
@@ -123,6 +168,17 @@ class Test:
         gallery_button.click()
 
         assert self.driver.current_url == "http://localhost:5000/gallery"
+
+    def test_claimsButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        claims_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Claims']")))
+        claims_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/view-claims"
 
     def test_profileButton_firstButton(self):
         self.driver.get("http://localhost:5000/login")
