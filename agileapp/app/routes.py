@@ -144,7 +144,7 @@ def new_item():
     if form.validate_on_submit():
         item = LostItem(name=form.name.data, 
                         description=form.description.data, 
-                        tags="default_tags", 
+                        tags=form.tags.data, 
                         photo_paths="", 
                         admin_id=current_user.id)
         files = request.files.getlist('photos')
