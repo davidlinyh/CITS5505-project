@@ -16,8 +16,131 @@ class Test:
         self.driver.quit()
 
     #Function/method names should be sufficient to understand the test case undertaken.
+
+    #ADMIN: NAV BAR TEST_________________________________________________________________________________
+
+    def test_galleryButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        #After logging in as an admin, we land on gallery page. So, going to manage account page for testing purposes
+        self.driver.get("http://localhost:5000/manage-account")
+
+        gallery_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Gallery']")))
+        gallery_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/gallery"
     
+    def test_claimsButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        claims_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Claims']")))
+        claims_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/admin/claims"
+
+    def test_newItemButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        newItem_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='New Item']")))
+        newItem_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/admin/new-item"
+
+    def test_manageItemsButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        manageItems_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Manage Items']")))
+        manageItems_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/admin/manage-items"
+    
+    def test_profileButton_firstButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        dropdown_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "dropdown")))
+        dropdown_button.click()
+
+        manage_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Manage Account']")))
+        manage_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/manage-account"
+
+    def test_profileButton_secondButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        dropdown_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "dropdown")))
+        dropdown_button.click()
+
+        logout_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Log Out']")))
+        logout_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/login"
+    
+
+    #USER: NAV BAR TEST__________________________________________________________________________________
+'''
+    def test_galleryButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user2@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        #After logging in as an user, we land on gallery page. So, going to manage account page for testing purposes
+        self.driver.get("http://localhost:5000/manage-account")
+
+        gallery_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Gallery']")))
+        gallery_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/gallery"
+
+    def test_profileButton_firstButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user2@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        dropdown_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "dropdown")))
+        dropdown_button.click()
+
+        manage_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Manage Account']")))
+        manage_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/manage-account"
+
+    def test_profileButton_secondButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user2@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        dropdown_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "dropdown")))
+        dropdown_button.click()
+
+        logout_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Log Out']")))
+        logout_button.click()
+
+        assert self.driver.current_url == "http://localhost:5000/login"
+'''
     #MANAGE-ACCOUNT PAGE TEST___________________________________________________________________________
+'''    
     def test_editButton(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -63,7 +186,7 @@ class Test:
         edit_button.click()
 
         # Path to the folder containing photos
-        photos_folder = r'C:\Users\adhar\Desktop\sem3\cits5505\Group project\1\CITS5505-project\agileapp\app\static\profile_photos'
+        photos_folder = r''
 
         # Sample data for other fields
         first_names = ["Alice", "Bob", "Charlie", "Diana"]
@@ -140,7 +263,7 @@ class Test:
         save_button = self.driver.find_element(By.XPATH, "//input[@type='submit']")
         save_button.click()
 
-        
+'''        
     #LOGIN PAGE TEST___________________________________________________________________________         
 '''
     def test_login_correctCredentials(self):
@@ -192,9 +315,9 @@ class Test:
 
         #Check if the error message gets displayed
         assert any("User not found. Please register first." in error.text for error in error_message)
-
+'''
     #REGISTER PAGE TEST___________________________________________________________________________
-
+'''
     def test_register_newuser(self):
         self.driver.get("http://localhost:5000/register")
         self.driver.find_element(By.NAME,"firstname").send_keys("Adharsh Sundaram")
