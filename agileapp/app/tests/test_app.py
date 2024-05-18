@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select 
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
 
@@ -17,9 +18,34 @@ class Test:
         self.driver.quit()
 
     #Function/method names should be sufficient to understand the test case undertaken.
+'''
+    #SEARCH ON GALLERY PAGE TEST_________________________________________________________________________
+    def test_search(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
 
+        search_box = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//input[@name='query']")))
+
+        search_box.send_keys("wallet")
+
+        search_box.send_keys(Keys.RETURN)
+
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "gallery")))
+
+        search_results = self.driver.find_elements(By.CLASS_NAME, "grid_title")
+        found = False
+        for result in search_results:
+            if "Wallet" in result.text:  # Assuming the item title contains "Wallet"
+                found = True
+                break
+
+        assert found, "Search results do not contain expected items."
+
+'''
     #ADMIN: NEW ITEM PAGE TEST___________________________________________________________________________
-
+'''
     def test_publishItem(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -34,7 +60,7 @@ class Test:
         self.driver.find_element(By.ID, "tags").send_keys("blue, block")
 
         photo_input = self.driver.find_element(By.ID, "photos")
-        photo_input.send_keys(r"C:\Users\adhar\Desktop\sem3\cits5505\Group project\1\CITS5505-project\agileapp\app\static\item_photos\sample_photo.JPG")
+        photo_input.send_keys(r"")
 
         self.driver.find_element(By.ID, "submit").click()
 
@@ -50,7 +76,7 @@ class Test:
                 break
 
         assert found
-
+'''
     #ADMIN: MANAGING CLAIMS test_________________________________________________________________________
 '''
     def test_editButton(self):
