@@ -18,6 +18,39 @@ class Test:
 
     #Function/method names should be sufficient to understand the test case undertaken.
 
+    #ADMIN: NEW ITEM PAGE TEST___________________________________________________________________________
+
+    def test_publishItem(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        newItem_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='New Item']")))
+        newItem_button.click()
+
+        self.driver.find_element(By.ID, "name").send_keys("Blue")
+        self.driver.find_element(By.ID, "description").send_keys("Blue block")
+        self.driver.find_element(By.ID, "tags").send_keys("blue, block")
+
+        photo_input = self.driver.find_element(By.ID, "photos")
+        photo_input.send_keys(r"C:\Users\adhar\Desktop\sem3\cits5505\Group project\1\CITS5505-project\agileapp\app\static\item_photos\sample_photo.JPG")
+
+        self.driver.find_element(By.ID, "submit").click()
+
+        self.driver.get("http://localhost:5000/gallery")
+
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "gallery")))
+
+        gallery_items = self.driver.find_elements(By.CLASS_NAME, "grid_title")
+        found = False
+        for item in gallery_items:
+            if item.text == "Blue":
+                found = True
+                break
+
+        assert found
+
     #ADMIN: MANAGING CLAIMS test_________________________________________________________________________
 '''
     def test_editButton(self):
@@ -29,7 +62,6 @@ class Test:
         claims_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Claims']")))
         claims_button.click()
 
-        
         first_row_edit_link = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//tbody/tr[1]//a[contains(text(), 'Edit')]")))
         first_row_edit_link.click()
 
