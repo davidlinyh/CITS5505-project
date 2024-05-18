@@ -307,14 +307,14 @@ def search_items():
     query = request.args.get('query', '')
     items = []
     list_photo_paths = {}
-
+    
     if query:
         search = "%{}%".format(query)
         items = db.session.query(LostItem).filter(
             LostItem.name.ilike(search) |
             LostItem.description.ilike(search) |
             LostItem.tags.ilike(search)
-        ).all()
+        ).order_by(desc(LostItem.updated_at)).all()
 
         for item in items:
             list_photo_paths[str(item.id)] = json.loads(item.photo_paths)

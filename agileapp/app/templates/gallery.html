@@ -8,8 +8,10 @@ Gallery
 Gallery
 
 <form method="GET" action="{{ url_for('search_items') }}">
-    <input type="text" name="query" placeholder="Search for items" required>
-    <input type="submit" value="Search">
+    <div class="search-box">
+        <input type="text" name="query" placeholder="Search for items" required>
+        <input type="submit" value="Search">
+    </div>
 </form>
 
 {% endblock %}
@@ -24,13 +26,11 @@ Gallery
                 <div class="grid_content">
                     {% if list_photo_paths[item.id|string] %}
                         {% for photo_path in list_photo_paths[item.id|string] %}
-                        
+                        <a class="grid_link" href="/item/{{ item.id }}"></a>
+                        <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image for {{ item.name }}" onload="resizeGridItem(this)" onerror="handleImageError('{{ item.id }}')">
                         <div class="grid_body">
-                            <a class="grid_link" href="/item/{{ item.id }}"></a>
-                            <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image for {{ item.name }}" onload="resizeGridItem(this)" onerror="handleImageError('{{ item.id }}')">
                             
-                            
-                                <h3 class="grid_title">{{ item.name }}</h3>
+                                <h5 class="grid_title">{{ item.name }}</h5>
                                 <p class="grid_status_tags">
                                     {{ item.status }}<br>
                                     {{ item.tags }}
