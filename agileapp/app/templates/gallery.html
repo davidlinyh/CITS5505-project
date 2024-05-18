@@ -14,30 +14,41 @@ Gallery
 
 {% endblock %}
 
+<!-- alternative container for content within gallery-->
+{% block container_class %}transparent-container{% endblock %}
+
 {% block content %}
-
-
-<div class="gallery">
-    {% for item in items %}
-        <div class="grid" id="item-{{ item.id }}">
-            {% if list_photo_paths[item.id|string] %}
-                {% for photo_path in list_photo_paths[item.id|string] %}
-                    <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image for {{ item.name }}" onerror="handleImageError('{{ item.id }}')">
-                    <div class="grid_body">
-                        <h3 class="grid_title">{{ item.name }}</h3>
-                        <a class="grid_link" href="/item/{{ item.id }}"></a>
-                    </div>
-                    <p class="grid_description">
-                        Status: {{ item.status }}<br>
-                        {{ item.description }}
-                    </p>
-                {% endfor %}
-            {% endif %}
-        </div>
-    {% else %}
-        <p>No items found.</p>
-    {% endfor %}
-</div>
-
+    <div class="gallery">
+        {% for item in items %}
+            <div class="grid item" id="item-{{ item.id }}">
+                <div class="grid_content">
+                    {% if list_photo_paths[item.id|string] %}
+                        {% for photo_path in list_photo_paths[item.id|string] %}
+                            
+                            <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image for {{ item.name }}" onload="resizeGridItem(this)" onerror="handleImageError('{{ item.id }}')">
+                            
+                            <div class="grid_body">
+                                <h3 class="grid_title">{{ item.name }}</h3>
+                                <a class="grid_link" href="/item/{{ item.id }}"></a>
+                                <p class="grid_status_tags">
+                                    {{ item.status }}<br>
+                                    {{ item.tags }}
+                                </p>
+                                 
+                                <!-- 
+                                    Maybe not include here so item page better?
+                                    <p class="grid_description">
+                                    {{ item.description }}
+                                </p> -->
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p>No items found.</p>
+        {% endfor %}
+    </div>
 {% endblock %}
+
 

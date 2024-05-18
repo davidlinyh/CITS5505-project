@@ -13,6 +13,15 @@ body{
 	background-color: rgb(242, 242, 242);
 }
 
+h2{
+	font-weight: bold;
+	font-size:xx-large;
+	color: black;
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
 h3{
 	font-weight: normal;
 	font-size:x-large;
@@ -281,23 +290,24 @@ hr {
     overflow: auto; 
 }
 
+.transparent-container {
+	
+	display: block;
+	background-color: rgb(242, 242, 242);
+	width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
+    margin-top: 10px;
+    padding: 10px;
+    overflow: auto; 
+}
+
 /* gallery styling */
 .gallery {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 2fr));
-	columns: 4;
-	grid-gap: 10px;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-gap: 7px;
 	
-}
-@media (max-width: 1200px) {
-	.gallery {
-		columns: 3;
-   }
-}
-@media (max-width: 992px) {
-	.gallery {
-		columns: 2;
-   }
 }
 
 .grid {
@@ -306,15 +316,10 @@ hr {
 	position: relative;
 }
 
-.grid:before {
+.grid_content {
+	background-color: white;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
 	border-radius: 5px;
-	content: '';
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	
 }
 
 .grid img{
@@ -323,15 +328,19 @@ hr {
 }
 
 .grid_title {
-	font-size: 28px;
-	font-weight: bold;
-	margin: 0px 0px 10px 0px;
+	font-size: 400;
 }
 
-.grid_description {
+.grid_status_tags {
 	font-size: 14px;
-	font-weight: 300;
+	text-align: center;	
+	font-weight: bold;
 }
+
+/* .grid_description {
+	font-size: 14px;
+	text-align: center;
+} */
 
 .grid_link {
 	position: absolute;
@@ -342,27 +351,12 @@ hr {
 }
 
 .grid_body {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	padding: 30px 30px;
-	color: #fff;
-	display: flex;
-	flex-direction: column;
+    padding: 10px;
+    color: #333;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
-
-
-/* if we introduce tag feature */
-/* .grid_tag {
-	background-color: rgba(255, 255, 255, .8);
-	color: #333;
-	border-radius: 5px;
-	padding: 5px 15px;
-	margin-bottom: 5px;
-}
- */
  
 
 /* item page styling */

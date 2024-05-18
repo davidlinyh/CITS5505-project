@@ -39,17 +39,19 @@
             </nav>
 
         </header>
+        
         <!--header for page-->
         <div class="page-header">
             <h2>{% block header %}Default Header{% endblock %}</h2>
         </div>
-
+    
         <!--container for content-->
-        <div class="content-container">
+        <div class="{% block container_class %}content-container{% endblock %}">
             {% block content %}
 
             {% endblock %}
         </div>
+        
         <footer class ="additional-text">
             <p>If you have found an item, please return it to the Guild Office located at:</p>
             <address>
