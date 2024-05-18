@@ -328,7 +328,9 @@ hr {
 }
 
 .grid_title {
-	font-size: 400;
+	font-size: 22px;
+	text-align: center;	
+	font-weight: normal;
 }
 
 .grid_status_tags {
