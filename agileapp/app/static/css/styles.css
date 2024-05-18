@@ -324,11 +324,14 @@ hr {
 
 .grid img{
 	width: 100%;
-	border-radius: 5px;
+	border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
 }
 
 .grid_title {
-	font-size: 400;
+	font-size: 22px;
+	text-align: center;	
+	font-weight: normal;
 }
 
 .grid_status_tags {
@@ -358,6 +361,10 @@ hr {
     flex-direction: column;
 }
  
+.search-box {
+	align-items: end;
+}
+
 
 /* item page styling */
 /* Modal (background) */
