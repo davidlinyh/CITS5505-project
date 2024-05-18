@@ -7,13 +7,12 @@ Search Results
 {% block header %}
 Search Results for "{{ query }}"
 
-<form method="GET" action="{{ url_for('search_items') }}">
-    <div class="search-box">
-        <input type="text" name="query" placeholder="Search for items" required>
-        <input type="submit" value="Search">
+<form method="GET" action="{{ url_for('search_items') }}" class="centered-form">
+    <div class="search-container">
+        <input type="text" name="query" placeholder="Search for items" required class="search-input">
+        <input type="submit" value="Search" class="search-button">
     </div>
 </form>
-
 {% endblock %}
 
 <!-- alternative container for content within gallery-->
@@ -26,25 +25,22 @@ Search Results for "{{ query }}"
                 <div class="grid item" id="item-{{ item.id }}">
                     <div class="grid_content">
                         {% if list_photo_paths[item.id|string] %}
-                            {% for photo_path in list_photo_paths[item.id|string] %}
-                            <a class="grid_link" href="/item/{{ item.id }}"></a>
-                            <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image for {{ item.name }}" onload="resizeGridItem(this)" onerror="handleImageError('{{ item.id }}')">
-                            <div class="grid_body">
-                                
-                                    <h5 class="grid_title">{{ item.name }}</h5>
-                                    <p class="grid_status_tags">
-                                        {{ item.status }}<br>
-                                        {{ item.tags }}
-                                    </p>
-                                        
-                                    <!-- 
-                                        Maybe not include here so item page better?
-                                        <p class="grid_description">
-                                        {{ item.description }}
-                                    </p> -->
-                            </div>
-                            {% endfor %}
-                        {% endif %}
+                        {% set first_photo_path = list_photo_paths[item.id|string][0] %}
+                        <a class="grid_link" href="/item/{{ item.id }}"></a>
+                        <img src="{{ url_for('static', filename='item_photos/' + first_photo_path) }}" alt="Image for {{ item.name }}" onload="resizeGridItem(this)" onerror="handleImageError('{{ item.id }}')">
+                        <div class="grid_body">
+                            <h5 class="grid_title">{{ item.name }}</h5>
+                            <p class="grid_status_tags">
+                                {{ item.status }}<br>
+                                {{ item.tags }}
+                            </p>
+                            <!-- 
+                                Maybe not include here so item page better?
+                                <p class="grid_description">
+                                {{ item.description }}
+                            </p> -->
+                        </div>
+                    {% endif %}
                     </div>
                 </div>
             {% else %}

@@ -24,9 +24,6 @@ window.onclick = function(event) {
     }
 }
 
-
-
-
 // CSS Grid height adjustments and resizing of boxes
 function resizeGridItem(item) {
     const grid = document.getElementsByClassName('gallery')[0];
