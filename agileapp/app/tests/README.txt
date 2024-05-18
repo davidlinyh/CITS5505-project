@@ -1,3 +1,6 @@
+Each funtion can be considered as an unit.
+
+Uncomment a test you want to run and copy paste it below def teardown_method(): or at line 21. (If you run the whole test, it would take sometime to run:( ).
 
 While testing, For Manage-Account page, Paste your Absolute path to agileapp/app/static/profile_photos in line number () or you could have a folder of photos yourself, mine is:
 

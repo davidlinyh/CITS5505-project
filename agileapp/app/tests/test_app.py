@@ -18,8 +18,54 @@ class Test:
         self.driver.quit()
 
     #Function/method names should be sufficient to understand the test case undertaken.
-'''
+
+    #ADMIN: MANAGING CLAIMS TEST_________________________________________________________________________
+    def test_editButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        manageItems_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Manage Items']")))
+        manageItems_button.click()
+
+        first_row_edit_link = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//tbody/tr[1]//a[contains(text(), 'Edit')]")))
+        first_row_edit_link.click()
+
+        assert self.driver.current_url == "http://localhost:5000/admin/edit-item/1"
+    
+    def test_updateClaim(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        manageItems_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Manage Items']")))
+        manageItems_button.click()
+
+        
+        first_row_edit_link = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//tbody/tr[1]//a[contains(text(), 'Edit')]")))
+        first_row_edit_link.click()
+
+        status_dropdown = WebDriverWait(self.driver, 10).until( EC.visibility_of_element_located((By.ID, "status")))
+
+        # Change the status value for the first item
+        select = Select(status_dropdown)
+        select.select_by_value("claimed")
+
+        update_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//input[@type='submit']")))
+        update_button.click()
+
+        # Locate the row for the first item 
+        row = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//tbody/tr[1]")))
+
+        # Check the status column (4th column) to see if it's "claimed"
+        status_text = row.find_elements(By.TAG_NAME, "td")[3].text
+        assert status_text == "claimed"
+    
+
     #SEARCH ON GALLERY PAGE TEST_________________________________________________________________________
+''' 
     def test_search(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -109,7 +155,7 @@ class Test:
         status_dropdown = WebDriverWait(self.driver, 10).until( EC.visibility_of_element_located((By.ID, "status")))
         admin_response_textarea = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "admin_response")))
 
-        # Change the status value
+        # Change the status value for the first claim
         select = Select(status_dropdown)
         select.select_by_value("approved")
 
