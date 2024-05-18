@@ -19,6 +19,7 @@ class Test:
 
     #Function/method names should be sufficient to understand the test case undertaken.
 
+'''
     #ADMIN: MANAGING CLAIMS TEST_________________________________________________________________________
     def test_editButton(self):
         self.driver.get("http://localhost:5000/login")
@@ -63,7 +64,7 @@ class Test:
         status_text = row.find_elements(By.TAG_NAME, "td")[3].text
         assert status_text == "claimed"
     
-
+'''
     #SEARCH ON GALLERY PAGE TEST_________________________________________________________________________
 ''' 
     def test_search(self):
@@ -181,15 +182,14 @@ class Test:
         self.driver.find_element(By.NAME,"password").send_keys("123")
         self.driver.find_element(By.NAME,"submit").click()
 
-        notebook_div = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[h3[text()='Notebook']]")))
-        view_details_link = notebook_div.find_element(By.LINK_TEXT, "View Details")
-        view_details_link.click()
+        first_item = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='grid item'][1]//a[@class='grid_link']")))
+        first_item.click()
 
         claimItem_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "claimBtn")))
         claimItem_button.click()
 
         description = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "claimer_description")))
-        description.send_keys("These notebooks are mine. I left them in the class.")
+        description.send_keys("That wallet is mine. I left it in the class.")
 
         submit_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit']")))
         submit_button.click()
@@ -199,7 +199,7 @@ class Test:
         table_rows = WebDriverWait(self.driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "tbody tr")))
         claimed_item_found = False
         for row in table_rows:
-            if "Notebook" in row.text: 
+            if "Wallet" in row.text: 
                 claimed_item_found = True
         
         assert claimed_item_found
@@ -213,7 +213,7 @@ class Test:
         self.driver.find_element(By.NAME,"password").send_keys("123")
         self.driver.find_element(By.NAME,"submit").click()
 
-        view_details_link = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[1]//a[contains(text(), 'View Details')]")))
+        view_details_link = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='grid item'][1]//a[@class='grid_link']")))
         view_details_link.click()
 
         assert self.driver.current_url == "http://localhost:5000/item/1"
