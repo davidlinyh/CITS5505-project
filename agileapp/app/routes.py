@@ -2,6 +2,7 @@ from urllib.parse import urlsplit
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
+from sqlalchemy import desc
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from app import app, db
@@ -59,12 +60,15 @@ def register():
 @app.route('/gallery')
 @login_required
 def gallery():
-    items = LostItem.query.all() # Fetch all lost items from the 
-
+    items = LostItem.query.order_by(desc(LostItem.updated_at)).all()
+    
     # Create dictionary of photo paths for each item
     list_photo_paths = {}
     for item in items:
         list_photo_paths[str(item.id)] = json.loads(item.photo_paths)   
+        # Query items and sort by last_updated in descending order
+    
+
     return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
 
 @app.route('/manage-account', methods=['GET', 'POST'])
