@@ -17,8 +17,21 @@ class Test:
 
     #Function/method names should be sufficient to understand the test case undertaken.
 
-    #ADMIN: NAV BAR TEST_________________________________________________________________________________
+    #CONTACT BUTTON (located in the footer of both login and register page) TEST_________________________________________________________________________________
+    def test_contactButton(self):
+        self.driver.get("http://localhost:5000/login")
 
+        contact_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='contact us']")))
+        current_window_handle = self.driver.current_window_handle
+        contact_button.click()
+
+        new_window_handle = [handle for handle in self.driver.window_handles if handle != current_window_handle][0]
+        self.driver.switch_to.window(new_window_handle)
+
+        assert self.driver.current_url == "https://www.uwastudentguild.com/contact"
+
+    #ADMIN: NAV BAR TEST_________________________________________________________________________________
+'''
     def test_galleryButton(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -94,7 +107,7 @@ class Test:
 
         assert self.driver.current_url == "http://localhost:5000/login"
     
-
+'''
     #USER: NAV BAR TEST__________________________________________________________________________________
 '''
     def test_galleryButton(self):
