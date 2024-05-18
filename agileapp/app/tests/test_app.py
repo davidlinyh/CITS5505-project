@@ -1,3 +1,5 @@
+import os
+import random
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -14,8 +16,8 @@ class Test:
         self.driver.quit()
 
     #Function/method names should be sufficient to understand the test case undertaken.
-    #LOGIN PAGE TEST___________________________________________________________________________
-    #manage-account PAGE TEST___________________________________________________________________________
+    
+    #MANAGE-ACCOUNT PAGE TEST___________________________________________________________________________
     def test_editButton(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -23,8 +25,8 @@ class Test:
         self.driver.find_element(By.NAME,"submit").click()
         
         self.driver.get("http://localhost:5000/manage-account")
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "form_button")))
-        self.driver.find_element(By.CLASS_NAME,"form_button").click()
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
         try:
             # Wait for up to 10 seconds for the element to become available
             first_name = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "first_name")))
@@ -32,7 +34,114 @@ class Test:
         except NoSuchElementException:
             print("Test failed: The element was not found") 
     
+    def test_cancelButton(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
 
+        self.driver.get("http://localhost:5000/manage-account")
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
+
+        try:
+            # Wait for up to 10 seconds for the element to become available
+            cancel_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Cancel']")))
+            cancel_button.click()
+            assert WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']"))) 
+        except NoSuchElementException:
+            print("Test failed: The element was not found") 
+
+    def test_reflectionOfEdits(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user2@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        self.driver.get("http://localhost:5000/manage-account")
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
+
+        # Path to the folder containing photos
+        photos_folder = r'C:\Users\adhar\Desktop\sem3\cits5505\Group project\1\CITS5505-project\agileapp\app\static\profile_photos'
+
+        # Sample data for other fields
+        first_names = ["Alice", "Bob", "Charlie", "Diana"]
+        last_names = ["Smith", "Johnson", "Williams", "Brown"]
+        emails = ["example1@gmail.com", "example2@gmail.com", "example3@gmail.com", "example4@gmail.com"]
+        passwords = ["$123","#123","!123","@123"]
+
+        # Function to get random data
+        def get_random_data():
+            first_name = random.choice(first_names)
+            last_name = random.choice(last_names)
+            email = random.choice(emails)
+            password = random.choice(passwords)
+            return first_name, last_name, email, password
+        
+        # Function to select a random photo
+        def get_random_photo(folder_path):
+            photos = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+            return os.path.join(folder_path, random.choice(photos))
+        
+        # Get random data for other fields
+        first_name, last_name, email, password = get_random_data()
+
+        # Get a random photo from the folder
+        random_photo_path = get_random_photo(photos_folder)
+        
+        # Find form fields and fill them with random data
+        first_name_input = self.driver.find_element(By.ID, "first_name")
+        last_name_input = self.driver.find_element(By.ID, "last_name")
+        email_input = self.driver.find_element(By.ID, "email")
+        new_password_input = self.driver.find_element(By.ID, "new_password")
+        file_input = self.driver.find_element(By.ID, "photo_path")
+        
+        first_name_input.clear()
+        first_name_input.send_keys(first_name)
+        last_name_input.clear()
+        last_name_input.send_keys(last_name)
+        email_input.clear()
+        email_input.send_keys(email)
+        new_password_input.clear()
+        new_password_input.send_keys(password)
+        file_input.send_keys(random_photo_path)
+
+        #Save the changes
+        save_button = self.driver.find_element(By.XPATH, "//input[@type='submit']")
+        save_button.click()
+
+        changed_email_input = self.driver.find_element(By.ID,'email')
+
+        flag = False
+
+        if email == changed_email_input.get_attribute('value'): flag = True
+
+        self.revert_to_old_data(email="user2@gmail.com",password="123")
+
+        assert flag
+    
+    def revert_to_old_data(self, email, password):
+
+        # Revert back to old data for subsequent tests
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
+
+        # Find form fields and fill them with old data
+        email_input = self.driver.find_element(By.ID, "email")
+        password_input = self.driver.find_element(By.ID, "new_password")
+
+        email_input.clear()
+        email_input.send_keys(email)
+        password_input.clear()
+        password_input.send_keys(password)
+
+        # Save the changes
+        save_button = self.driver.find_element(By.XPATH, "//input[@type='submit']")
+        save_button.click()
+
+        
+    #LOGIN PAGE TEST___________________________________________________________________________         
 '''
     def test_login_correctCredentials(self):
         self.driver.get("http://localhost:5000/login")
