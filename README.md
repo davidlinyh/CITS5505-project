@@ -66,10 +66,27 @@ pip install -r requirements.txt
 ```
 This command installs all the necessary libraries and tools specified in the requirements.txt file.
 
+# Database:
+The database file is in agileapp/app.db
+To reset the database file into test case data, do the following:
+First, make sure you are on agileapp directory CITS5505-project/agileapp/ 
+And then, empty the database:
+```
+flask db downgrade base
+flask db upgrade
+```
+Then, import the test data with the python code agileapp/app/test_data.py :
+```
+flask shell
+```
+After entering the shell, then type:
+```
+from app import test_data
+```
+
 # Run the application:
 To run the application, use the command
 ```
 flask run
 ```
-
 The application will be running on http://localhost:5000/ by default.
