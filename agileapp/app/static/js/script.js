@@ -51,4 +51,16 @@ function handleImageError(itemId) {
     }
 }
 
+// Manage Account Edit toggle
+function toggleVisibility() {
+    var elements = document.getElementsByClassName("toggleHide");
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].style.display === "none") {
+            elements[i].style.display = "block"; // Show the element
+        } else {
+            elements[i].style.display = "none"; // Hide the element
+        }
+    }
+}
+
 

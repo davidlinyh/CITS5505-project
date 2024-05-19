@@ -9,66 +9,38 @@ Item Details
 {% endblock %}
 
 {% block content %}
-<main>
-    <section>
-        {% for photo_path in photo_paths %}
-        <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image of {{ item.name }}"
-            width="300">
-        {% endfor %}
-        <p><strong>Description:</strong> {{ item.description }}</p>
-        <p><strong>Tags:</strong> {{ item.tags }}</p>
-        <p><strong>Status:</strong> {{ item.status }}</p>
-        <p><strong>Found on:</strong> {{ item.created_at.strftime('%Y-%m-%d') }}</p>
-        <p><strong>Last Updated:</strong> {{ item.updated_at.strftime('%Y-%m-%d') }}</p>
-    </section>
-    <section>
-        <button id="claimBtn">Claim Item</button>
-    </section>
-</main>
+<div class="center">
 
-<!-- The Modal -->
-<div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <form action="/submit-claim" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="item_id" value="{{ item.id }}"> <!-- Hidden field for item ID -->
-            <label for="claimer_description">Describe your claim:</label><br>
-            <textarea id="claimer_description" name="claimer_description" required></textarea><br>
+    {% for photo_path in photo_paths %}
+    <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" alt="Image of {{ item.name }}"
+        width="300">
+    {% endfor %} 
+    
+    <br>
+    <label class="item-font" for="Found_On">Found On:</label> <br> <p>{{ item.created_at.strftime('%Y-%m-%d') }}</p>
+    <label class="item-font" for="Last_Updated">Last Updated:</label><br><p>{{ item.updated_at.strftime('%Y-%m-%d') }}</p>
+    <label class="item-font" for="Description">Description:</label><br>  <p>{{ item.description }}</p>
+    <label class="item-font" for="Tags">Tags:</label> <br> <p>{{ item.tags }}</p>
+    <label class="item-font" for="Status">Status:</label> <br> <p>{{ item.status }}</p>
 
-            <label for="evidence_photo_paths">Upload Evidence (optional):</label><br>
-            <input type="file" id="evidence_photo_paths" name="evidence_photo_paths" accept="image/*" multiple><br><br>
+    <button class="form_button" type="claimBtn">Claim Item</button>
 
-            <input type="submit" value="Submit Claim">
-        </form>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form action="/submit-claim" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="item_id" value="{{ item.id }}"> <!-- Hidden field for item ID -->
+                <label for="claimer_description">Describe your claim:</label><br>
+                <textarea id="claimer_description" name="claimer_description" required></textarea><br>
+
+                <label for="evidence_photo_paths">Upload Evidence (optional):</label><br>
+                <input type="file" id="evidence_photo_paths" name="evidence_photo_paths" accept="image/*" multiple><br><br>
+
+                <input type="submit" value="Submit Claim">
+            </form>
+        </div>
     </div>
 </div>
-
-<script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("claimBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal 
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
 {% endblock %}
