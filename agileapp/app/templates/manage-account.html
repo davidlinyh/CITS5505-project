@@ -19,11 +19,11 @@ Manage Account
     </div>
     <div class="toggleHide" style="display: none">
         <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required><br>
+        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required pattern="[A-Za-z\s]+" title="First name should only contain letters and spaces"><br>
         <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required><br>
+        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required pattern="[A-Za-z\s]+" title="Last name should only contain letters and spaces"><br>
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email" value="{{ user.email }}" required><br>
+        <input type="email" id="email" name="email" value="{{ user.email }}" required title="Please enter a valid email address"><br>
     </div>
     <div>
         <hr>
@@ -52,7 +52,7 @@ Manage Account
         </div> -->
         <div>
             <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password" placeholder="Create new password">
+            <input type="password" id="new_password" name="new_password" placeholder="Create new password" pattern="^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" title="Password must be at least 8 characters long and include at least one special character (!@#$%^&*)">
         </div>
     </div>
     

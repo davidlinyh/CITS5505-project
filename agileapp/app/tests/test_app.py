@@ -420,8 +420,8 @@ class Test:
 
     def test_reflectionOfEdits(self):
         self.driver.get("http://localhost:5000/login")
-        self.driver.find_element(By.NAME,"email").send_keys("user2@gmail.com")
-        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("!123Adharsh")
         self.driver.find_element(By.NAME,"submit").click()
 
         self.driver.get("http://localhost:5000/manage-account")
@@ -435,7 +435,7 @@ class Test:
         first_names = ["Alice", "Bob", "Charlie", "Diana"]
         last_names = ["Smith", "Johnson", "Williams", "Brown"]
         emails = ["example1@gmail.com", "example2@gmail.com", "example3@gmail.com", "example4@gmail.com"]
-        passwords = ["$123","#123","!123","@123"]
+        passwords = ["$123Adharsh","#123Adharsh","%123Adharsh","@123Adharsh"]
 
         # Function to get random data
         def get_random_data():
@@ -483,7 +483,7 @@ class Test:
 
         if email == changed_email_input.get_attribute('value'): flag = True
 
-        self.revert_to_old_data(email="user2@gmail.com",password="123")
+        self.revert_to_old_data(email="user1@gmail.com",password="!123Adharsh")
 
         assert flag
     
