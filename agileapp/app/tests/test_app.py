@@ -206,7 +206,7 @@ class Test:
         claimItem_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, "claimBtn")))
         claimItem_button.click()
 
-        description = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "claimer_description")))
+        description = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.NAME, "claimer_description")))
         description.send_keys("That wallet is mine. I left it in the class.")
 
         submit_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit']")))
