@@ -14,12 +14,12 @@ Manage Account
 
 {% block content %}
 <div class="form-container">
-    <form action="{{ url_for('manage_account') }}" , method="post" enctype="multipart/form-data">
+    <form action="{{ url_for('manage_account') }}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="user_id" value="{{ user.id }}">
         <h3>Account Details</h3>
         <div class="toggleHide">
-            <label for="name">Name:</label> <br> {{ user.first_name }} {{ user.last_name }} <br>
-            <label for="email">Email:</label> <br> {{ user.email }} <br>
+            <label>Name:</label> <br> {{ user.first_name }} {{ user.last_name }} <br>
+            <label>Email:</label> <br> {{ user.email }} <br>
         </div>
         <div class="toggleHide" style="display: none">
             <label for="first_name">First Name:</label>
@@ -34,7 +34,7 @@ Manage Account
         </div>
         <div class="toggleHide">
             
-            <label for="current_photo">Current Photo:</label>
+            <label>Current Photo:</label>
             <br> <br>
             <div class = "center">
                 <img src="{{ url_for('static', filename='profile_photos/' + current_user.photo_path) }}" alt="Profile Image" class="profile-img">
@@ -53,10 +53,6 @@ Manage Account
                 <hr>
             </div>
             <h3>Change Password</h3>
-            <!-- <div >
-                <label for="old_password">Current Password:</label>
-                <input type="password" id="old_password" name="old_password" placeholder="Enter current password">
-            </div> -->
             <div>
                 <label for="new_password">New Password:</label>
                 <input class="form-control-alt" type="password" id="new_password" name="new_password" placeholder="Create new password" pattern="^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" title="Password must be at least 8 characters long and include at least one special character (!@#$%^&*)">
@@ -68,7 +64,7 @@ Manage Account
             <button class="form_button toggleHide" onclick="toggleVisibility()" style="display: none">Cancel</button>
         </div>
     </form>
-</div>
+
 
 
 <button class="form_button toggleHide" onclick="toggleVisibility()">Edit</button>

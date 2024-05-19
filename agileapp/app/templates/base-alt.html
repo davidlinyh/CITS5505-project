@@ -28,7 +28,7 @@
                             <a href="{{ url_for('admin_manage_items') }}">Manage Items</a>
                         {% endif %}
                         <div class="dropdown">
-                            <img class="profile-navbar" src="{{ url_for('static', filename='profile_photos/' + current_user.photo_path) }}" alt="Profile Image" class="profile-img">
+                            <img class="profile-navbar" src="{{ url_for('static', filename='profile_photos/' + current_user.photo_path) }}" alt="Profile Image">
                             <div class="dropdown-content">
                                 <a href="{{ url_for('manage_account') }}">Manage Account</a>
                                 <a href="{{ url_for('logout') }}">Log Out</a>
@@ -36,9 +36,10 @@
                         </div>
                     </div> 
                 </div>
+            </nav>
             {% endif %}
                 
-            </nav>
+            
 
         </header>
         
@@ -52,22 +53,21 @@
             <div class="container">
             {% block content %}
 
+            {% endblock %}
+            
+            <hr>
+            <footer class ="additional-text">
+                <p>If you have found an item, please return it to the Guild Office located at:</p>
+                <address>
+                    UWA Student Guild Office, 1 Hackett Drive, Crawley WA 6009
+                </address>
+                <p>For any enquiries, please <a href="https://www.uwastudentguild.com/contact" target="blank">contact us</a>.</p>
+                <br>
+                <p >© 2024 UWA Student Guild. All rights reserved.</p>
+            </footer>
+
             </div>
         </div>
-        
-        {% endblock %}
-        <hr>
-        
-        <footer class ="additional-text">
-            <p>If you have found an item, please return it to the Guild Office located at:</p>
-            <address>
-                UWA Student Guild Office, 1 Hackett Drive, Crawley WA 6009
-            </address>
-            <p>For any enquiries, please <a href="https://www.uwastudentguild.com/contact" target="blank">contact us</a>.</p>
-            <br>
-            <p >© 2024 UWA Student Guild. All rights reserved.</p>
-        </footer>
-
-
+    </div>
     </body>
 </html>

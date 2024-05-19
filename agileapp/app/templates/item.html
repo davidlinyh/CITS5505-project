@@ -19,11 +19,11 @@ Item Details
 </div>
     <br>
 <div class="center">
-    <label class="item-font" for="Found_On">Found On:</label> <br> <p>{{ item.created_at.strftime('%Y-%m-%d') }}</p>
-    <label class="item-font" for="Last_Updated">Last Updated:</label><br><p>{{ item.updated_at.strftime('%Y-%m-%d') }}</p>
-    <label class="item-font" for="Description">Description:</label><br>  <p>{{ item.description }}</p>
-    <label class="item-font" for="Status">Status:</label> <br> <p>{{ item.status }}</p>
-    <label class="item-font" for="Tags">Tags:</label> <br> <p>{{ item.tags }}</p>
+    <span class="item-font">Found On:</span> <br> <p>{{ item.created_at.strftime('%Y-%m-%d') }}</p>
+    <span class="item-font">Last Updated:</span> <br> <p>{{ item.updated_at.strftime('%Y-%m-%d') }}</p>
+    <span class="item-font">Description:</span> <br> <p>{{ item.description }}</p>
+    <span class="item-font">Status:</span> <br> <p>{{ item.status }}</p>
+    <span class="item-font">Tags:</span> <br> <p>{{ item.tags }}</p>
     
 
     <button class="form_button" id="claimBtn">Claim Item</button>
@@ -37,8 +37,8 @@ Item Details
                 <br>
                 <form action="/submit-claim" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="item_id" value="{{ item.id }}"> <!-- Hidden field for item ID -->
-                    <label for="claimer_description">Describe your claim:</label><br>
-                    <textarea class="form-control-description" type="claimer_description" name="claimer_description" required></textarea><br>
+                    <label>Describe your claim:</label><br>
+                    <textarea class="form-control-description" name="claimer_description" required></textarea><br>
 
                     <label for="evidence_photo_paths">Upload Evidence (optional):</label><br>
                     <input type="file" id="evidence_photo_paths" name="evidence_photo_paths" accept="image/*" multiple><br><br>

@@ -270,7 +270,7 @@ hr {
 .same-line-btn {
 	padding-top: 10px;
 	display: flex;
-	gap: -50px;
+	gap: 5px;
 }
 
 /* text for switching to login/ register page */
@@ -280,7 +280,7 @@ hr {
 
 /* for address, and contact us info for login/ register */
 .additional-text{
-	padding-top: 3%;
+	
 	padding-bottom: 3%;
 	font-size: small;
 	font-style: italic;
@@ -435,6 +435,7 @@ hr {
 	border: 1px solid black;
 	outline: none;
 	display: block;
+	padding-left: 10px;
 
 }
 

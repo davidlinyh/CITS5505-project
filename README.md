@@ -1,8 +1,18 @@
 # CITS5505-project
 
 
+## Team Member
+| Student ID | Name         | GitHub Username |
+|------------|--------------|-----------------|
+| 23796349  | Adharsh Sundaram Soudakar     | adarsh136         |
+| 23853569  | Ammad Rahman   | AmmadR       |
+| 22570361  | David Yonghui Lin | davidlinyh     |
+| 23894575  | Ida Bagus Prawira Janottama KN | gusprauwa     |
+
 ## Description
-This project is a basic Flask application.
+This project is a basic Flask application. An application to facilitate UWA Guild for Lost and Found items in University. 
+A user have to register an account before viewing the gallery of Lost items, claim their item, and upload their prove of ownership of their item.
+A member of UWA Guild Student can act as an Administrator, to post a lost item to the gallery, and also approve or deny the claim.
 
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
@@ -66,10 +76,37 @@ pip install -r requirements.txt
 ```
 This command installs all the necessary libraries and tools specified in the requirements.txt file.
 
+# Database:
+The database file is in agileapp/app.db
+To reset the database file into test case data, do the following:
+First, make sure you are on agileapp directory CITS5505-project/agileapp/ 
+And then, empty the database:
+```
+flask db downgrade base
+flask db upgrade
+```
+Then, import the test data with the python code agileapp/app/test_data.py :
+```
+flask shell
+```
+After entering the shell, then type:
+```
+from app import test_data
+```
+
 # Run the application:
 To run the application, use the command
 ```
 flask run
 ```
-
 The application will be running on http://localhost:5000/ by default.
+
+Login information:
+for user:
+email: user2@gmail.com
+password: 123
+
+for admin:
+email: admin1@gmail.com
+password: 123
+

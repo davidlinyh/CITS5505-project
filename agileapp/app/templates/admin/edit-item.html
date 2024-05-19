@@ -17,19 +17,19 @@ Edit Item
             <label for="name">Item Name:</label><br>
             <input class="form-control-alt" type="text" id="name" name="name" value="{{ item.name }}" required>
 
-            <label for="description">Description:</label><br>
-            <textarea class="form-control-description" type="description" name="description" required>{{ item.description }}</textarea>
+            <label>Description:</label><br>
+            <textarea class="form-control-description" name="description" required>{{ item.description }}</textarea>
 
             <label for="tags">Tags (separate by commas, no whitespace):</label><br>
             <input class="form-control-alt" type="text" id="tags" name="tags" value="{{ item.tags }}" required>
 
             <label for="status">Status:</label><br>
-            <select id="status" name="status" required>
+            <select size="2" id="status" name="status" required>
                 <option value="unclaimed" {% if item.status == 'unclaimed' %}selected{% endif %}>Unclaimed</option>
                 <option value="claimed" {% if item.status == 'claimed' %}selected{% endif %}>Claimed</option>
             </select> <br> <br>
-            <label for="photo_paths">Photo Path:</label><br>
-            <input class="form-control-alt" type="text" id="" name="photo_paths" value="{{ item.photo_paths }}">
+            <label>Photo Path:</label><br>
+            <input class="form-control-alt" type="text" name="photo_paths" value="{{ item.photo_paths }}">
                     <input type="file" id="photos" name="photos" multiple><br>
 
             <div class="same-line-btn">
@@ -38,5 +38,5 @@ Edit Item
             </div>
         </form>
 
-    </div>
+
 {% endblock %}
