@@ -7,6 +7,9 @@ Search Results
 {% block header %}
 Search Results for "{{ query }}"
 
+{% endblock %}
+
+{% block search_form %}
 <form method="GET" action="{{ url_for('search_items') }}" class="centered-form">
     <div class="search-container">
         <input type="text" name="query" placeholder="Search for items" required class="search-input">

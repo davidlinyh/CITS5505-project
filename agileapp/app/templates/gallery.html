@@ -8,13 +8,16 @@ Gallery
 
 Gallery
 
+{% endblock %}
+
+
+{% block search_form %}
 <form method="GET" action="{{ url_for('search_items') }}" class="centered-form">
     <div class="search-container">
         <input type="text" name="query" placeholder="Search for items" required class="search-input">
         <input type="submit" value="Search" class="search-button">
     </div>
 </form>
-
 {% endblock %}
 
 <!-- alternative container for content within gallery-->
@@ -36,11 +39,7 @@ Gallery
                                 {{ item.status }}<br>
                                 {{ item.tags }}
                             </p>
-                            <!-- 
-                                Maybe not include here so item page better?
-                                <p class="grid_description">
-                                {{ item.description }}
-                            </p> -->
+
                         </div>
                     {% endif %}
                 </div>
