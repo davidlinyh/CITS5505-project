@@ -10,10 +10,12 @@ from app.forms import LoginForm, RegistrationForm, AddItemForm
 from app.models import User, LostItem, Claim
 import os
 import json
+import html
 
 def array_to_string(arr): return json.dumps(arr)
 def string_to_array(s): return json.loads(s)
 
+# Route for login page
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -22,12 +24,12 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = db.session.scalar(sa.select(User).where(User.email == form.email.data))
+        user = db.session.scalar(sa.select(User).where(User.email == html.escape(form.email.data)))
         if user is None:
             flash('User not found. Please register first.', 'info')
             return redirect(url_for('login'))
-        if not user.check_password(form.password.data):
-            flash('Invalid password', 'error')
+        if not user.check_password(html.escape(form.password.data)):
+            flash('Invalid password', 'password')
             return redirect(url_for('login'))
 
         login_user(user, remember=form.remember_me.data if 'remember_me' in form else False)
@@ -36,26 +38,29 @@ def login():
 
     return render_template('login.html', form=form)
 
+# Route for logout
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
+# Route for registration page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('gallery'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(first_name=form.firstname.data, last_name=form.lastname.data, email=form.email.data)
-        user.set_password(form.password.data)
+        user = User(first_name=html.escape(form.firstname.data), last_name=html.escape(form.lastname.data), email=html.escape(form.email.data))
+        user.set_password(html.escape(form.password.data))
         db.session.add(user)
         db.session.commit()
         notify_admin_new_user(user) #NOTIFICATION TO ADMIN ON NEW USER REGISTRATION
-        flash('Registration Success! Please Log in to continue.')
+        flash('Registration Success! Please Log in to continue.','register')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+# Route for gallery page, displaying all lost items
 @app.route('/gallery')
 @login_required
 def gallery():
@@ -70,6 +75,7 @@ def gallery():
 
     return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
 
+# Route for managing user account
 @app.route('/manage-account', methods=['GET', 'POST'])
 @login_required
 def manage_account():
@@ -98,9 +104,7 @@ def manage_account():
         return redirect(url_for('manage_account'))
     return render_template('manage-account.html', user=current_user)
 
-
-
-
+# Route for viewing a single lost item
 @app.route('/item/<int:item_id>')
 @login_required
 def item(item_id):
@@ -108,7 +112,7 @@ def item(item_id):
     photo_paths = json.loads(item.photo_paths)
     return render_template('item.html', item_id=item_id, item=item, photo_paths=photo_paths)
 
-
+# Admin route for index page
 @app.route('/admin/index')
 @app.route('/admin')
 @login_required
@@ -125,6 +129,7 @@ def admin_index():
                               .all()
     return render_template('admin/index.html', recent_items=recent_items, recent_claims=recent_claims)
 
+# Admin route to manage items
 @app.route('/admin/manage-items', methods=['GET']) 
 @login_required
 def admin_manage_items(): 
@@ -133,6 +138,7 @@ def admin_manage_items():
     items = LostItem.query.all() # Fetch all lost items from the database
     return render_template('admin/manage-items.html', items=items)
 
+# Admin route to add item
 @app.route('/admin/new-item', methods=['GET', 'POST'])
 @login_required
 def new_item():
@@ -142,8 +148,8 @@ def new_item():
     form = AddItemForm()
     # Validate form before updating the database
     if form.validate_on_submit():
-        item = LostItem(name=form.name.data, 
-                        description=form.description.data, 
+        item = LostItem(name=html.escape(form.name.data), 
+                        description=html.escape(form.description.data), 
                         tags=form.tags.data, 
                         photo_paths="", 
                         admin_id=current_user.id)
@@ -167,6 +173,7 @@ def new_item():
 
     return render_template('/admin/new-item.html', form=form)
 
+# Admin route to edit item
 @app.route('/admin/edit-item/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def admin_edit_item(item_id):
@@ -176,9 +183,9 @@ def admin_edit_item(item_id):
     item = db.session.query(LostItem).filter_by(id=item_id).first()
     if request.method == 'POST':
         if item:
-            item.name = request.form.get('name', item.name)
-            item.description = request.form.get('description', item.description)
-            item.tags = request.form.get('tags', item.tags)
+            item.name = html.escape(request.form.get('name', item.name))
+            item.description = html.escape(request.form.get('description', item.description))
+            item.tags = html.escape(request.form.get('tags', item.tags))
             item.status = request.form.get('status', item.status)
 
             # Handle multiple photos upload
@@ -206,7 +213,8 @@ def admin_edit_item(item_id):
         else:
             flash('Item not found.', 'error')
             return redirect(url_for('admin_manage_items'))
-        
+
+# Admin route to view claims     
 @app.route('/admin/claims')
 @login_required
 def admin_claims():
@@ -216,6 +224,7 @@ def admin_claims():
     claims = db.session.query(Claim, User, LostItem).join(User, User.id == Claim.claimer_id).join(LostItem, LostItem.id == Claim.item_id).all()
     return render_template('admin/claims.html', claims=claims)
 
+# Admin route to edit claim
 @app.route('/admin/edit-claim/<int:claim_id>', methods=['GET', 'POST'])
 @login_required
 def edit_claim(claim_id):
@@ -247,6 +256,7 @@ def update_item_status(item_id):
         item.status = 'claimed'
         db.session.commit()
 
+# Route to submit a claim
 @app.route('/submit-claim', methods=['POST'])
 def submit_claim():
     if not current_user.is_authenticated:
@@ -283,6 +293,7 @@ def submit_claim():
     flash('Your claim has been submitted successfully.', 'success')
     return redirect(url_for('item', item_id=item_id))  # Redirect back to the item page
 
+# Admin route to delete item
 @app.route('/admin/delete-item/<int:item_id>', methods=['POST'])
 @login_required
 def admin_delete_item(item_id):
@@ -295,12 +306,14 @@ def admin_delete_item(item_id):
     flash('Item deleted successfully.', 'success')
     return redirect(url_for('admin_manage_items'))
 
+# Route to view user claims
 @app.route('/view-claims')
 @login_required
 def view_claims():
     user_claims = db.session.query(Claim, LostItem).join(LostItem, Claim.item_id == LostItem.id).filter(Claim.claimer_id == current_user.id).all()
     return render_template('view-claims.html', claims=user_claims)
 
+# Route to search for items
 @app.route('/search', methods=['GET'])
 @login_required
 def search_items():

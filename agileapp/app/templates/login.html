@@ -39,6 +39,18 @@ Login
                 <span class="error" style="color: red;">{{ error }}</span>
                 {% endfor %}
             </div>
+             <!-- Flash messages block -->
+             {% with messages = get_flashed_messages(with_categories=true) %}
+             {% if messages %}
+             <ul class=flashes>
+                {% for category, message in messages %}
+                {% if category in ['password', 'info', 'register'] %}
+                <li class="{{ category }}">{{ message }}</li>
+                {% endif %}
+                {% endfor %}
+             </ul>
+             {% endif %}
+             {% endwith %}
             <div>
                 {{ form.submit(class_='form_button') }}
             </div>
