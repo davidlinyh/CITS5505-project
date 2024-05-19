@@ -1,35 +1,42 @@
-{% extends "base.html" %}
+{% extends "base-alt.html" %}
 
 {% block title %}
-Edit Claim
+Edit Item
 {% endblock %}
 
 {% block header %}
-Edit Claim
+Edit Item
 {% endblock %}
 
+<!-- alternative container for container wrap (not aligned center)-->
+{% block container_class %}container-wrap-alt{% endblock %}
+
 {% block content %}
-<form action="{{ url_for('admin_edit_item', item_id=item.id) }}" method="POST" enctype="multipart/form-data">
-    <label for="name">Item Name:</label><br>
-    <input type="text" id="name" name="name" value="{{ item.name }}" required><br>
+    <div class="form-container">
+        <form action="{{ url_for('admin_edit_item', item_id=item.id) }}" method="POST" enctype="multipart/form-data">
+            <label for="name">Item Name:</label><br>
+            <input class="form-control-alt" type="text" id="name" name="name" value="{{ item.name }}" required>
 
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description" required>{{ item.description }}</textarea><br>
+            <label for="description">Description:</label><br>
+            <textarea class="form-control-description" type="description" name="description" required>{{ item.description }}</textarea>
 
-    <label for="tags">Tags:</label><br>
-    <input type="text" id="tags" name="tags" value="{{ item.tags }}" required><br>
+            <label for="tags">Tags (separate by commas, no whitespace):</label><br>
+            <input class="form-control-alt" type="text" id="tags" name="tags" value="{{ item.tags }}" required>
 
-    <label for="status">Status:</label><br>
-    <select id="status" name="status" required>
-        <option value="unclaimed" {% if item.status == 'unclaimed' %}selected{% endif %}>Unclaimed</option>
-        <option value="claimed" {% if item.status == 'claimed' %}selected{% endif %}>Claimed</option>
-    </select>
+            <label for="status">Status:</label><br>
+            <select id="status" name="status" required>
+                <option value="unclaimed" {% if item.status == 'unclaimed' %}selected{% endif %}>Unclaimed</option>
+                <option value="claimed" {% if item.status == 'claimed' %}selected{% endif %}>Claimed</option>
+            </select> <br> <br>
+            <label for="photo_paths">Photo Path:</label><br>
+            <input class="form-control-alt" type="text" id="" name="photo_paths" value="{{ item.photo_paths }}">
+                    <input type="file" id="photos" name="photos" multiple><br>
 
-    <label for="photo_paths">Photo Path:</label><br>
-    <input type="text" id="" name="photo_paths" value="{{ item.photo_paths }}"><br>
-            <input type="file" id="photos" name="photos" multiple><br>
+            <div class="same-line-btn">
+                <input class="form_button" type="submit" value="Update Item">
+                <button class="form_button" type="button" onclick="window.location.href = '{{ url_for('admin_manage_items') }}';">Cancel</button>
+            </div>
+        </form>
 
-    <input type="submit" value="Update Item">
-</form>
-<button type="button" onclick="window.location.href = '{{ url_for('admin_manage_items') }}';">Cancel</button>
+    </div>
 {% endblock %}

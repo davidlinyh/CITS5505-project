@@ -11,6 +11,7 @@
     <body>
         <header>
             <!-- navbar-->
+            {% if current_user.is_authenticated %}
             <nav class="navbar">
                 <div class="nav-items">
                     <div class="nav-menu">
@@ -35,6 +36,7 @@
                         </div>
                     </div> 
                 </div>
+            {% endif %}
                 
             </nav>
 
@@ -46,11 +48,15 @@
         </div>
     
         <!--container for content-->
-        <div class="{% block container_class %}content-container{% endblock %}">
+        <div class="{% block container_class %}container-wrap{% endblock %}">
+            <div class="container">
             {% block content %}
 
-            {% endblock %}
+            </div>
         </div>
+        
+        {% endblock %}
+        <hr>
         
         <footer class ="additional-text">
             <p>If you have found an item, please return it to the Guild Office located at:</p>
@@ -61,6 +67,7 @@
             <br>
             <p >© 2024 UWA Student Guild. All rights reserved.</p>
         </footer>
+
 
     </body>
 </html>

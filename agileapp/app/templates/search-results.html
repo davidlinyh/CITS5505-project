@@ -6,33 +6,46 @@ Search Results
 
 {% block header %}
 Search Results for "{{ query }}"
+
+<form method="GET" action="{{ url_for('search_items') }}" class="centered-form">
+    <div class="search-container">
+        <input type="text" name="query" placeholder="Search for items" required class="search-input">
+        <input type="submit" value="Search" class="search-button">
+    </div>
+</form>
 {% endblock %}
 
+<!-- alternative container for content within gallery-->
+{% block container_class %}transparent-container{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
     {% if items %}
-        <div class="row">
+        <div class="gallery">
             {% for item in items %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        {% for photo_path in list_photo_paths[item.id|string] %}
-                        <img src="{{ url_for('static', filename='item_photos/' + photo_path) }}" class="card-img-top" alt="{{ item.name }}" style="width: 100%; height: auto;">
-                        {% endfor %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ item.name }}</h5>
-                            <p class="card-text">{{ item.description }}</p>
-                            <p><strong>Tags:</strong> {{ item.tags }}</p>
-                            <p><strong>Status:</strong> {{ item.status }}</p>
-                            <a href="/item/{{ item.id }}" class="btn btn-primary">View Details</a>
+                <div class="grid item" id="item-{{ item.id }}">
+                    <div class="grid_content">
+                        {% if list_photo_paths[item.id|string] %}
+                        {% set first_photo_path = list_photo_paths[item.id|string][0] %}
+                        <a class="grid_link" href="/item/{{ item.id }}"></a>
+                        <img src="{{ url_for('static', filename='item_photos/' + first_photo_path) }}" alt="Image for {{ item.name }}" onload="resizeGridItem(this)" onerror="handleImageError('{{ item.id }}')">
+                        <div class="grid_body">
+                            <h5 class="grid_title">{{ item.name }}</h5>
+                            <p class="grid_status_tags">
+                                {{ item.status }}<br>
+                                {{ item.tags }}
+                            </p>
+                            <!-- 
+                                Maybe not include here so item page better?
+                                <p class="grid_description">
+                                {{ item.description }}
+                            </p> -->
                         </div>
+                    {% endif %}
                     </div>
                 </div>
+            {% else %}
+                <p>No items found.</p>
             {% endfor %}
         </div>
-    {% else %}
-        <div class="alert alert-info" role="alert">
-            No items found matching your search query.
-        </div>
     {% endif %}
-</div>
 {% endblock %}

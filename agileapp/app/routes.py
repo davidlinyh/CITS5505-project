@@ -2,6 +2,7 @@ from urllib.parse import urlsplit
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
+from sqlalchemy import desc
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from app import app, db
@@ -9,6 +10,7 @@ from app.forms import LoginForm, RegistrationForm, AddItemForm
 from app.models import User, LostItem, Claim
 import os
 import json
+import html
 
 def array_to_string(arr): return json.dumps(arr)
 def string_to_array(s): return json.loads(s)
@@ -21,12 +23,12 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = db.session.scalar(sa.select(User).where(User.email == form.email.data))
+        user = db.session.scalar(sa.select(User).where(User.email == html.escape(form.email.data)))
         if user is None:
             flash('User not found. Please register first.', 'info')
             return redirect(url_for('login'))
-        if not user.check_password(form.password.data):
-            flash('Invalid password', 'error')
+        if not user.check_password(html.escape(form.password.data)):
+            flash('Invalid password', 'password')
             return redirect(url_for('login'))
 
         login_user(user, remember=form.remember_me.data if 'remember_me' in form else False)
@@ -46,24 +48,27 @@ def register():
         return redirect(url_for('gallery'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(first_name=form.firstname.data, last_name=form.lastname.data, email=form.email.data)
-        user.set_password(form.password.data)
+        user = User(first_name=html.escape(form.firstname.data), last_name=html.escape(form.lastname.data), email=html.escape(form.email.data))
+        user.set_password(html.escape(form.password.data))
         db.session.add(user)
         db.session.commit()
         notify_admin_new_user(user) #NOTIFICATION TO ADMIN ON NEW USER REGISTRATION
-        flash('Registration Success! Please Log in to continue.')
+        flash('Registration Success! Please Log in to continue.','register')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/gallery')
 @login_required
 def gallery():
-    items = LostItem.query.all() # Fetch all lost items from the 
-
+    items = LostItem.query.order_by(desc(LostItem.updated_at)).all()
+    
     # Create dictionary of photo paths for each item
     list_photo_paths = {}
     for item in items:
         list_photo_paths[str(item.id)] = json.loads(item.photo_paths)   
+        # Query items and sort by last_updated in descending order
+    
+
     return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
 
 @app.route('/manage-account', methods=['GET', 'POST'])
@@ -138,9 +143,9 @@ def new_item():
     form = AddItemForm()
     # Validate form before updating the database
     if form.validate_on_submit():
-        item = LostItem(name=form.name.data, 
-                        description=form.description.data, 
-                        tags="default_tags", 
+        item = LostItem(name=html.escape(form.name.data), 
+                        description=html.escape(form.description.data), 
+                        tags=form.tags.data, 
                         photo_paths="", 
                         admin_id=current_user.id)
         files = request.files.getlist('photos')
@@ -172,9 +177,9 @@ def admin_edit_item(item_id):
     item = db.session.query(LostItem).filter_by(id=item_id).first()
     if request.method == 'POST':
         if item:
-            item.name = request.form.get('name', item.name)
-            item.description = request.form.get('description', item.description)
-            item.tags = request.form.get('tags', item.tags)
+            item.name = html.escape(request.form.get('name', item.name))
+            item.description = html.escape(request.form.get('description', item.description))
+            item.tags = html.escape(request.form.get('tags', item.tags))
             item.status = request.form.get('status', item.status)
 
             # Handle multiple photos upload
@@ -303,14 +308,14 @@ def search_items():
     query = request.args.get('query', '')
     items = []
     list_photo_paths = {}
-
+    
     if query:
         search = "%{}%".format(query)
         items = db.session.query(LostItem).filter(
             LostItem.name.ilike(search) |
             LostItem.description.ilike(search) |
             LostItem.tags.ilike(search)
-        ).all()
+        ).order_by(desc(LostItem.updated_at)).all()
 
         for item in items:
             list_photo_paths[str(item.id)] = json.loads(item.photo_paths)

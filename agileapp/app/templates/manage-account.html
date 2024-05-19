@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base-alt.html" %}
 
 {% block title %}
 Manage Account
@@ -8,71 +8,69 @@ Manage Account
 Manage Account
 {% endblock %}
 
-{% block content %}
+<!-- alternative container for container wrap (not aligned center)-->
+{% block container_class %}container-wrap-alt{% endblock %}
 
-<form action="{{ url_for('manage_account') }}" , method="post" enctype="multipart/form-data">
-    <input type="hidden" name="user_id" value="{{ user.id }}">
-    <h3>Account Details</h3>
-    <div class="toggleHide">
-        <label for="name">Name:</label> {{ user.first_name }} {{ user.last_name }} <br>
-        <label for="email">Email:</label>{{ user.email }} <br>
-    </div>
-    <div class="toggleHide" style="display: none">
-        <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required><br>
-        <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required><br>
-        <label for="email">Email:</label>
-        <input type="text" id="email" name="email" value="{{ user.email }}" required><br>
-    </div>
-    <div>
-        <hr>
-    </div>
-    <div class="toggleHide">
-        <label for="current_photo">Current Photo:</label>
-        <br>
-        <img src="{{ url_for('static', filename='profile_photos/' + current_user.photo_path) }}" alt="Profile Image" class="profile-img">
-    </div>
-    <div class="toggleHide" style="display: none">
-        <h3>Upload Photo</h3>
-        <label for="photo_path">Choose a photo to upload:</label>
-        <br>
-        <input type="file" id="photo_path" name="photo_path" accept="image/*" onchange="">
-        <br>
-    </div>
-    
-    <div class="toggleHide" style="display: none">
+
+{% block content %}
+<div class="form-container">
+    <form action="{{ url_for('manage_account') }}" , method="post" enctype="multipart/form-data">
+        <input type="hidden" name="user_id" value="{{ user.id }}">
+        <h3>Account Details</h3>
+        <div class="toggleHide">
+            <label for="name">Name:</label> <br> {{ user.first_name }} {{ user.last_name }} <br>
+            <label for="email">Email:</label> <br> {{ user.email }} <br>
+        </div>
+        <div class="toggleHide" style="display: none">
+            <label for="first_name">First Name:</label>
+            <input class="form-control-alt" type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required pattern="[A-Za-z\s]+" title="First name should only contain letters and spaces">
+            <label for="last_name">Last Name:</label>
+            <input class="form-control-alt" type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required pattern="[A-Za-z\s]+" title="Last name should only contain letters and spaces">
+            <label for="email">Email:</label>
+            <input class="form-control-alt" type="email" id="email" name="email" value="{{ user.email }}" required title="Please enter a valid email address">
+        </div>
         <div>
             <hr>
         </div>
-        <h3>Change Password</h3>
-        <!-- <div >
-            <label for="old_password">Current Password:</label>
-            <input type="password" id="old_password" name="old_password" placeholder="Enter current password">
-        </div> -->
-        <div>
-            <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password" placeholder="Create new password">
+        <div class="toggleHide">
+            
+            <label for="current_photo">Current Photo:</label>
+            <br> <br>
+            <div class = "center">
+                <img src="{{ url_for('static', filename='profile_photos/' + current_user.photo_path) }}" alt="Profile Image" class="profile-img">
+            </div>
         </div>
-    </div>
-    
-    
-    <input class="form_button toggleHide" type="submit" style="display: none" value="Save Changes">
-</form>
+        <div class="toggleHide" style="display: none">
+            <h3>Upload Photo</h3>
+            <label for="photo_path">Choose a photo to upload:</label>
+            <br> <br>
+            <input type="file" id="photo_path" name="photo_path" accept="image/*" onchange="">
+            <br>
+        </div>
+        
+        <div class="toggleHide" style="display: none">
+            <div>
+                <hr>
+            </div>
+            <h3>Change Password</h3>
+            <!-- <div >
+                <label for="old_password">Current Password:</label>
+                <input type="password" id="old_password" name="old_password" placeholder="Enter current password">
+            </div> -->
+            <div>
+                <label for="new_password">New Password:</label>
+                <input class="form-control-alt" type="password" id="new_password" name="new_password" placeholder="Create new password" pattern="^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" title="Password must be at least 8 characters long and include at least one special character (!@#$%^&*)">
+            </div>
+        </div>
+        
+        <div class="same-line-btn">
+            <input class="form_button toggleHide" type="submit" style="display: none" value="Save Changes">
+            <button class="form_button toggleHide" onclick="toggleVisibility()" style="display: none">Cancel</button>
+        </div>
+    </form>
+</div>
 
-<button class="form_button toggleHide" onclick="toggleVisibility()" style="display: none">Cancel</button>
+
 <button class="form_button toggleHide" onclick="toggleVisibility()">Edit</button>
-<script>
 
-    function toggleVisibility() {
-        var elements = document.getElementsByClassName("toggleHide");
-        for (var i = 0; i < elements.length; i++) {
-            if (elements[i].style.display === "none") {
-                elements[i].style.display = "block"; // Show the element
-            } else {
-                elements[i].style.display = "none"; // Hide the element
-            }
-        }
-    }
-</script>
 {% endblock %}
