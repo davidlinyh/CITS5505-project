@@ -27,7 +27,7 @@ admin2 = User(
 
 claimer1 = User(
     email = "user1@gmail.com",
-    password_hash = generate_password_hash('123'),
+    password_hash = generate_password_hash('!123Adharsh'),
     previlage = "claimer",
     first_name = "Antony",
     last_name = "one",
@@ -91,8 +91,48 @@ item4 = LostItem(
     updated_at = datetime.now(),
     admin_id = admin1.id
 )
+item5 = LostItem(
+    name = "Apple Watch",
+    description = "A silver Apple Watch with a black sports band. The watch face is approximately 38mm in diameter and has a scratch on the top right corner. It was lost near the downtown area.",
+    tags = "watch,apple",
+    photo_paths = '["applewatch1.jpg","applewatch2.jpeg"]',
+    status = "unclaimed",
+    created_at = datetime.now(),
+    updated_at = datetime.now(),
+    admin_id = admin1.id
+)
+item6 = LostItem(
+    name = "Blue Waterbottle",
+    description = "A blue stainless steel water bottle with a capacity of 750ml. The bottle has a screw-on cap and a carabiner clip attached to the lid. It was lost while hiking in the nearby park.",
+    tags = "bottle",
+    photo_paths = '["bluewaterbottle.jpg"]',
+    status = "unclaimed",
+    created_at = datetime.now(),
+    updated_at = datetime.now(),
+    admin_id = admin1.id
+)
+item7 = LostItem(
+    name = "Bose Headphones",
+    description = "Bose noise-canceling headphones in black. They are wireless with ear cushions that are worn but still intact. The headphones were last seen in a black carrying case with the Bose logo on it.",
+    tags = "gadget,headphone",
+    photo_paths = '["boseheadphones1.jpeg","boseheadphones2.jpg"]',
+    status = "unclaimed",
+    created_at = datetime.now(),
+    updated_at = datetime.now(),
+    admin_id = admin1.id
+)
+item8 = LostItem(
+    name = "Car keys",
+    description = "A set of car keys with a key fob attached. The keys include a house key, a car key, and a keychain with a small flashlight. The key fob has a logo of the car manufacturer on it. They were lost in the vicinity of the shopping mall parking lot.",
+    tags = "key,car",
+    photo_paths = '["carkeys.jpg"]',
+    status = "unclaimed",
+    created_at = datetime.now(),
+    updated_at = datetime.now(),
+    admin_id = admin1.id
+)
 
-db.session.add_all([item1, item2, item3, item4])
+db.session.add_all([item1, item2, item3, item4, item5, item6, item7, item8])
 db.session.commit()
 
 
@@ -120,7 +160,7 @@ claim2 = Claim(
     updated_at = datetime.now()
 )
 claim3 = Claim(
-    claimer_description = "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna",
+    claimer_description = "I lost my black leather wallet while traveling on the bus yesterday. It is about 4 inches wide and 3 inches tall. Inside, there are several cards, including my driver's license, credit cards, and membership cards. There is also a small amount of cash and a cherished family photo. The wallet holds sentimental value to me, and I would be grateful to have it returned.",
     evidence_photo_paths = '["sample_photo_evidence3.1.jpeg"]',
     admin_response = "Thank you for reaching out regarding the lost wallet. We have received your claim and will compare the details provided with the found item. Please allow us some time to verify the ownership and we will contact you shortly with further instructions on how to proceed.",
     status = "waiting approval",
