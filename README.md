@@ -138,6 +138,6 @@ NOTE:
 To run the tests, 
 * Open the command prompt/prompt/terminal and install pytest, if not already installed (pip install pytest).
 * You may have to set your path variables right if it still shows pytest is not a callable command.
-* Once pytest is installed successfully if a terminal is open, switch to the same directory where this readme file is located or open a new terminal in this directory.
+* Once pytest is installed successfully if a terminal is open, switch to the directory \agileapp\app\tests\.
 * Just type pytest and press ENTER.
 * You should see the number of test cases passed (hopefully all).
