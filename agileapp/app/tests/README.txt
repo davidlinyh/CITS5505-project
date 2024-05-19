@@ -2,6 +2,10 @@ Each function can be considered as a unit.
 
 NOTE:
 ***************************************************************************************************************************************************************************************
+* Please dont change the password of user2@gmail.com, its being used for testing
+
+* Ignore the warning at line number 238 during testing. It is because I have escaped d for checking numbers, but since it its under comments, it shows this Deprecation warning.
+
 * Uncomment a test you want to run and copy-paste it below def teardown_method(): or at line 21. (If you run the whole test, it would take some time to run:( ).
 
 * Please have the app running.

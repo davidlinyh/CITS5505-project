@@ -1,6 +1,7 @@
 import os
 import unittest
 import random
+import re
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -207,7 +208,7 @@ class Test:
         claimItem_button.click()
 
         description = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.NAME, "claimer_description")))
-        description.send_keys("That wallet is mine. I left it in the class.")
+        description.send_keys("That thing is mine. I left it in the class.")
 
         submit_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit']")))
         submit_button.click()
@@ -224,7 +225,7 @@ class Test:
 '''
     #GALLERY PAGE TEST___________________________________________________________________________________
 '''
-    #Checking for the first item
+    #Checking for the first item on the gallery page (not the first item itself)
     def test_viewDetailsButton(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -234,7 +235,7 @@ class Test:
         view_details_link = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='grid item'][1]//a[@class='grid_link']")))
         view_details_link.click()
 
-        assert self.driver.current_url == "http://localhost:5000/item/1"
+        assert re.match(r"http://localhost:5000/item/\d+", self.driver.current_url)
 '''
     #CONTACT BUTTON (located in the footer of all pages) TEST_________________________
 '''   
