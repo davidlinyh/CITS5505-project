@@ -15,6 +15,7 @@ import html
 def array_to_string(arr): return json.dumps(arr)
 def string_to_array(s): return json.loads(s)
 
+# Route for login page
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,11 +38,13 @@ def login():
 
     return render_template('login.html', form=form)
 
+# Route for logout
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
+# Route for registration page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -57,6 +60,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+# Route for gallery page, displaying all lost items
 @app.route('/gallery')
 @login_required
 def gallery():
@@ -71,6 +75,7 @@ def gallery():
 
     return render_template('gallery.html', items=items, list_photo_paths=list_photo_paths)
 
+# Route for managing user account
 @app.route('/manage-account', methods=['GET', 'POST'])
 @login_required
 def manage_account():
@@ -99,9 +104,7 @@ def manage_account():
         return redirect(url_for('manage_account'))
     return render_template('manage-account.html', user=current_user)
 
-
-
-
+# Route for viewing a single lost item
 @app.route('/item/<int:item_id>')
 @login_required
 def item(item_id):
@@ -109,7 +112,7 @@ def item(item_id):
     photo_paths = json.loads(item.photo_paths)
     return render_template('item.html', item_id=item_id, item=item, photo_paths=photo_paths)
 
-
+# Admin route for index page
 @app.route('/admin/index')
 @app.route('/admin')
 @login_required
@@ -126,6 +129,7 @@ def admin_index():
                               .all()
     return render_template('admin/index.html', recent_items=recent_items, recent_claims=recent_claims)
 
+# Admin route to manage items
 @app.route('/admin/manage-items', methods=['GET']) 
 @login_required
 def admin_manage_items(): 
@@ -134,6 +138,7 @@ def admin_manage_items():
     items = LostItem.query.all() # Fetch all lost items from the database
     return render_template('admin/manage-items.html', items=items)
 
+# Admin route to add item
 @app.route('/admin/new-item', methods=['GET', 'POST'])
 @login_required
 def new_item():
@@ -168,6 +173,7 @@ def new_item():
 
     return render_template('/admin/new-item.html', form=form)
 
+# Admin route to edit item
 @app.route('/admin/edit-item/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def admin_edit_item(item_id):
@@ -207,7 +213,8 @@ def admin_edit_item(item_id):
         else:
             flash('Item not found.', 'error')
             return redirect(url_for('admin_manage_items'))
-        
+
+# Admin route to view claims     
 @app.route('/admin/claims')
 @login_required
 def admin_claims():
@@ -217,6 +224,7 @@ def admin_claims():
     claims = db.session.query(Claim, User, LostItem).join(User, User.id == Claim.claimer_id).join(LostItem, LostItem.id == Claim.item_id).all()
     return render_template('admin/claims.html', claims=claims)
 
+# Admin route to edit claim
 @app.route('/admin/edit-claim/<int:claim_id>', methods=['GET', 'POST'])
 @login_required
 def edit_claim(claim_id):
@@ -248,6 +256,7 @@ def update_item_status(item_id):
         item.status = 'claimed'
         db.session.commit()
 
+# Route to submit a claim
 @app.route('/submit-claim', methods=['POST'])
 def submit_claim():
     if not current_user.is_authenticated:
@@ -284,6 +293,7 @@ def submit_claim():
     flash('Your claim has been submitted successfully.', 'success')
     return redirect(url_for('item', item_id=item_id))  # Redirect back to the item page
 
+# Admin route to delete item
 @app.route('/admin/delete-item/<int:item_id>', methods=['POST'])
 @login_required
 def admin_delete_item(item_id):
@@ -296,12 +306,14 @@ def admin_delete_item(item_id):
     flash('Item deleted successfully.', 'success')
     return redirect(url_for('admin_manage_items'))
 
+# Route to view user claims
 @app.route('/view-claims')
 @login_required
 def view_claims():
     user_claims = db.session.query(Claim, LostItem).join(LostItem, Claim.item_id == LostItem.id).filter(Claim.claimer_id == current_user.id).all()
     return render_template('view-claims.html', claims=user_claims)
 
+# Route to search for items
 @app.route('/search', methods=['GET'])
 @login_required
 def search_items():
