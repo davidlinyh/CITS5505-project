@@ -112,13 +112,15 @@ password: 123
 
 # Testing:
 
+Please open agileapp\app\tests\test_app.py and make the changes in the NOTE section.
+
 Each function can be considered as a unit.
 
 NOTE:
 ***************************************************************************************************************************************************************************************
 * Please dont change the password of user2@gmail.com, its being used for testing
 
-* Ignore the warning at line number 238 during testing. It is because I have escaped d for checking numbers, but since it its under comments, it shows this Deprecation warning.
+* Ignore the warning at line number 238 during testing. It is because I have escaped d for checking numbers, but since it is under comments, it displays the Deprecation warning.
 
 * Uncomment a test you want to run and copy-paste it below def teardown_method(): or at line 21. (If you run the whole test, it would take some time to run:( ).
 
@@ -126,16 +128,16 @@ NOTE:
 
 * Please install Chrome as I have used Chrome drivers to test.
 
-* While testing, For the Manage-Account page, Paste your Absolute path to agileapp/app/static/profile_photos at line number () or you could have a folder of photos yourself, mine is:
+* While testing, For the Manage-Account page, Paste your Absolute path to agileapp/app/static/profile_photos at line number (526) or you could have a folder of photos yourself, mine is:
   C:\Users\adhar\Desktop\sem3\cits5505\Group project\1\CITS5505-project\agileapp\app\static\profile_photos
 
-* While testing, for the New item page, Paste your Absolute path to agileapp/app/static/profile_photos/{any photo} at line number () or you could use any photo as you wish, mine is:
+* While testing, for the New item page, Paste your Absolute path to agileapp/app/static/profile_photos/{any photo} at line number (129) or you could use any photo as you wish, mine is:
   C:\Users\adhar\Desktop\sem3\cits5505\Group project\1\CITS5505-project\agileapp\app\static\item_photos\sample_photo.JPG
 ***************************************************************************************************************************************************************************************
 
 To run the tests, 
 * Open the command prompt/prompt/terminal and install pytest, if not already installed (pip install pytest).
-* You may have to set your path variables right, if it still shows pytest is not a callable command.
+* You may have to set your path variables right if it still shows pytest is not a callable command.
 * Once pytest is installed successfully if a terminal is open, switch to the same directory where this readme file is located or open a new terminal in this directory.
 * Just type pytest and press ENTER.
 * You should see the number of test cases passed (hopefully all).
