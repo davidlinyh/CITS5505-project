@@ -28,7 +28,7 @@ def login():
             flash('User not found. Please register first.', 'info')
             return redirect(url_for('login'))
         if not user.check_password(html.escape(form.password.data)):
-            flash('Invalid password', 'error')
+            flash('Invalid password', 'password')
             return redirect(url_for('login'))
 
         login_user(user, remember=form.remember_me.data if 'remember_me' in form else False)
@@ -53,7 +53,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         notify_admin_new_user(user) #NOTIFICATION TO ADMIN ON NEW USER REGISTRATION
-        flash('Registration Success! Please Log in to continue.')
+        flash('Registration Success! Please Log in to continue.','register')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 

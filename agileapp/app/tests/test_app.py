@@ -1,4 +1,5 @@
 import os
+import unittest
 import random
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -19,8 +20,8 @@ class Test:
 
     #Function/method names should be sufficient to understand the test case undertaken.
 
-'''
     #ADMIN: MANAGING CLAIMS TEST_________________________________________________________________________
+'''
     def test_editButton(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("admin1@gmail.com")
@@ -196,7 +197,7 @@ class Test:
     def test_itemClaim(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
-        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"password").send_keys("!123Adharsh")
         self.driver.find_element(By.NAME,"submit").click()
 
         first_item = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='grid item'][1]//a[@class='grid_link']")))
@@ -346,7 +347,7 @@ class Test:
     def test_claimsButton(self):
         self.driver.get("http://localhost:5000/login")
         self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
-        self.driver.find_element(By.NAME,"password").send_keys("123")
+        self.driver.find_element(By.NAME,"password").send_keys("!123Adharsh")
         self.driver.find_element(By.NAME,"submit").click()
 
         claims_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Claims']")))
@@ -416,7 +417,99 @@ class Test:
             cancel_button.click()
             assert WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']"))) 
         except NoSuchElementException:
-            print("Test failed: The element was not found") 
+            print("Test failed: The element was not found")
+            
+    def test_invalidFirstName(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("!123Adharsh")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        self.driver.get("http://localhost:5000/manage-account")
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
+
+        self.driver.find_element(By.NAME,"first_name").clear()
+        self.driver.find_element(By.NAME,"first_name").send_keys("Adharsh@")
+
+        save_button = self.driver.find_element(By.XPATH, "//input[@type='submit']")
+        save_button.click()
+
+        try:
+            error_message = self.driver.find_element("xpath", '//div[contains(text(), "First name should only contain letters and spaces")]')
+            assert error_message is not None
+            print("Test passed")
+        except NoSuchElementException:
+            print("Test failed: Validation error message not displayed")
+    
+    def test_invalidLastName(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("!123Adharsh")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        self.driver.get("http://localhost:5000/manage-account")
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
+
+        self.driver.find_element(By.NAME,"last_name").clear()
+        self.driver.find_element(By.NAME,"last_name").send_keys("Soudakar!")
+
+        save_button = self.driver.find_element(By.XPATH, "//input[@type='submit']")
+        save_button.click()
+
+        try:
+            error_message = self.driver.find_element("xpath", '//div[contains(text(), "Last name should only contain letters and spaces")]')
+            assert error_message is not None
+            print("Test passed")
+        except NoSuchElementException:
+            print("Test failed: Validation error message not displayed")
+    
+    def test_invalidEmail(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("!123Adharsh")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        self.driver.get("http://localhost:5000/manage-account")
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
+
+        self.driver.find_element(By.NAME,"email").clear()
+        self.driver.find_element(By.NAME,"email").send_keys("user1gmail.com")
+
+        save_button = self.driver.find_element(By.XPATH, "//input[@type='submit']")
+        save_button.click()
+
+        try:
+            error_message = self.driver.find_element("xpath", '//div[contains(text(), "Please enter a valid email address")]')
+            assert error_message is not None
+            print("Test passed")
+        except NoSuchElementException:
+            print("Test failed: Validation error message not displayed")
+
+    def test_invalidPassword(self):
+        self.driver.get("http://localhost:5000/login")
+        self.driver.find_element(By.NAME,"email").send_keys("user1@gmail.com")
+        self.driver.find_element(By.NAME,"password").send_keys("!123Adharsh")
+        self.driver.find_element(By.NAME,"submit").click()
+
+        self.driver.get("http://localhost:5000/manage-account")
+        edit_button = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Edit']")))
+        edit_button.click()
+
+        self.driver.find_element(By.NAME,"new_password").clear()
+        self.driver.find_element(By.NAME,"new_password").send_keys("#123Ad")
+
+        save_button = self.driver.find_element(By.XPATH, "//input[@type='submit']")
+        save_button.click()
+
+        try:
+            error_message = self.driver.find_element("xpath", '//div[contains(text(), "Password must be at least 8 characters long and include at least one special character (!@#$%^&*)")]')
+            assert error_message is not None
+            print("Test passed")
+        except NoSuchElementException:
+            print("Test failed: Validation error message not displayed")
 
     def test_reflectionOfEdits(self):
         self.driver.get("http://localhost:5000/login")
